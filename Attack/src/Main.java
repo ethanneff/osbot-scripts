@@ -78,7 +78,7 @@ public class Main extends Script {
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
 		// state
-		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) < skills.getStatic(Skill.HITPOINTS) / 2;
+		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) < skills.getStatic(Skill.HITPOINTS);
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		NPC npc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible() && n.getHealthPercent() > 0

@@ -141,10 +141,10 @@ public class Main extends Script {
 		}
 
 		// find npc
-		if (npc != null && !npc.isVisible()) {
-			camera.toEntity(npc);
-			camera.toTop();
-		}
+//		if (npc != null && !npc.isVisible()) {
+//			camera.toEntity(npc);
+//			camera.toTop();
+//		}
 
 		// player busy
 		if (myPlayer().isAnimating() || myPlayer().isMoving() || myPlayer().isUnderAttack()) {

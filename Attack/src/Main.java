@@ -94,7 +94,6 @@ public class Main extends Script {
 				&& !n.isUnderAttack() && n.isAttackable() && !n.getName().contains("Rat")
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
 		GroundItem ground = getGroundItems().closest(n -> n != null
-				&& (n.getPosition().distance(myPlayer().getPosition()) > 1)
 				&& (n.getPosition().distance(myPlayer().getPosition()) <= distance)
 				&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
 						|| n.getName().contains("Rune") || n.getName().contains("arrow") || n.getDefinition().isNoted()

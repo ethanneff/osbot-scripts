@@ -2,11 +2,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import org.osbot.rs07.api.map.Area;
 import org.osbot.rs07.api.model.GroundItem;
 import org.osbot.rs07.api.model.Item;
 import org.osbot.rs07.api.model.NPC;
+import org.osbot.rs07.api.ui.EquipmentSlot;
+import org.osbot.rs07.api.ui.MagicSpell;
 import org.osbot.rs07.api.ui.Skill;
+import org.osbot.rs07.api.ui.Spells;
 import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
 import org.osbot.rs07.script.ScriptManifest;
@@ -14,20 +16,31 @@ import org.osbot.rs07.script.ScriptManifest;
 @ScriptManifest(author = "Me", info = "Curse cows", name = "Attack", version = 0, logo = "")
 public class Main extends Script {
 	// config
-	Skill skill = Skill.DEFENCE;
-	long startAmount = 0;
-	long experiencePerSpell = 29;
-	String npcName = "Cow";
-	boolean enableBones = false;
-	boolean enableCoin = false;
-	boolean enablePickup = true;
-	Area combatArea;
-	NPC target;
+	private Skill skill = Skill.STRENGTH;
+	private boolean enableCoin = false;
+	private boolean enablePickup = true;
+	private NPC target;
+	private Item ammo;
+	private boolean isRanged;
+	private int distance = 10;
+	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
 
 	@Override
 	public void onStart() throws InterruptedException {
+		isRanged = equipment.getItemInSlot(EquipmentSlot.WEAPON.slot).getName().contains("bow");
+		ammo = equipment.getItemInSlot(EquipmentSlot.ARROWS.slot);
+		int mode = configs.get(43);
+		switch (mode) {
+		case 1:
+			skill = Skill.STRENGTH;
+		case 3:
+			skill = Skill.DEFENCE;
+		default:
+			skill = Skill.ATTACK;
+		}
+		skill = isRanged ? Skill.RANGED : skill;
 		experienceTracker.start(skill);
-		getTabs().open(Tab.INVENTORY);
+		tabs.open(Tab.SKILLS);
 		sleep(1000);
 	}
 
@@ -48,17 +61,13 @@ public class Main extends Script {
 	public void onPaint(Graphics2D g) {
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		g.drawString("Curse everything", 2, 230);
-		g.drawString("Elapsed time:         \t" + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2,
-				250);
-		g.drawString("Current level:         \t" + String.valueOf(skills.getStatic(skill)) + "\t"
-				+ String.valueOf(skills.getExperience(skill)), 2, 270);
-		g.drawString("Next level:             \t" + String.valueOf(skills.getStatic(skill) + 1) + "\t"
-				+ String.valueOf(skills.experienceToLevel(skill)) + "\t"
-				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 290);
-		g.drawString("Experience gained: \t" + String.valueOf(experienceTracker.getGainedLevels(skill)) + "\t"
-				+ String.valueOf(experienceTracker.getGainedXP(skill)) + "\t"
-				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 310);
+		g.drawString("Time -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 30);
+		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill) + 1) + " ("
+				+ String.valueOf(combat.getCombatLevel()) + ") "
+				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 45);
+		g.drawString("Gained -> " + String.valueOf(experienceTracker.getGainedLevels(skill)) + " "
+				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
+				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 60);
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
 	}
 
@@ -83,38 +92,41 @@ public class Main extends Script {
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		NPC npc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible() && n.getHealthPercent() > 0
 				&& !n.isUnderAttack() && n.isAttackable() && !n.getName().contains("Rat")
-				&& n.getPosition().distance(myPlayer().getPosition()) <= 10);
-		GroundItem ground = getGroundItems()
-				.closest(n -> n != null && (n.getPosition().distance(myPlayer().getPosition()) > 1)
-						&& (n.getPosition().distance(myPlayer().getPosition()) <= 10)
-						&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
-								|| n.getName().contains("Rune") || n.getName().contains("Iron")
-								|| n.getName().contains("Tin") || n.getName().contains("Copper")
-								|| n.getName().contains("Cooked") || n.hasAction("Eat", "Drink")));
+				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
+		GroundItem ground = getGroundItems().closest(n -> n != null
+				&& (n.getPosition().distance(myPlayer().getPosition()) > 1)
+				&& (n.getPosition().distance(myPlayer().getPosition()) <= distance)
+				&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
+						|| n.getName().contains("Rune") || n.getName().contains("arrow") || n.getDefinition().isNoted()
+						|| n.getName().contains("Cooked") || n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			settings.setRunning(true);
 		}
-
-		// low hp logout
-		if (lowHp && food == null) {
-			stop();
-		}
-
-		// low hp eat
-		if (lowHp && food != null) {
-			food.interact("Eat", "Drink");
-			preventDoubleClick();
-			return nextLoop();
-		}
-
-		// fighting
-		if (target != null && target.isInteracting(myPlayer())) {
-			return nextLoop();
-		}
-		target = null;
-
+//
+//		// low hp logout
+//		if (lowHp && food == null) {
+//			if (magic.canCast(teleport)) {
+//				magic.castSpell(teleport);
+//				preventDoubleClick();
+//			}
+//			stop();
+//		}
+//
+//		// low hp eat
+//		if (lowHp && food != null) {
+//			food.interact("Eat", "Drink");
+//			preventDoubleClick();
+//			return nextLoop();
+//		}
+//
+//		// fighting
+//		if (target != null && target.isInteracting(myPlayer())) {
+//			return nextLoop();
+//		}
+//		target = null;
+//
 		// bury
 		if (bone != null) {
 			bone.interact("Bury");

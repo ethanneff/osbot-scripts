@@ -32,7 +32,7 @@ public class Main extends Script {
 		int mode = configs.get(43);
 		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
 		experienceTracker.start(skill);
-		tabs.open(Tab.SKILLS);
+		tabs.open(Tab.INVENTORY);
 		sleep(1000);
 	}
 

@@ -1,3 +1,11 @@
+
+// TODO: still click on doors
+// TODO: does not capture change in attack
+// TODO: still attacks multiple enemies if already attacked
+// TODO: lowhp causes infinite loop
+// TODO: needs escape if not action after time period (stuck)
+// TODO: needs to not pick up items if inventory full
+
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;

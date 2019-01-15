@@ -22,7 +22,7 @@ public class Main extends Script {
 	private NPC target;
 	private Item ammo;
 	private boolean isRanged;
-	private int distance = 10;
+	private int distance = 7;
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
 
 	@Override

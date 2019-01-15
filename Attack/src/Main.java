@@ -121,12 +121,7 @@ public class Main extends Script {
 //			return nextLoop();
 //		}
 //
-//		// fighting
-//		if (target != null && target.isInteracting(myPlayer())) {
-//			return nextLoop();
-//		}
-//		target = null;
-//
+
 		// bury
 		if (bone != null) {
 			bone.interact("Bury");
@@ -146,6 +141,12 @@ public class Main extends Script {
 //			camera.toEntity(npc);
 			camera.toTop();
 		}
+
+		// fighting
+		if (target != null && target.isInteracting(myPlayer())) {
+			return nextLoop();
+		}
+		target = null;
 
 		// player busy
 		if (myPlayer().isAnimating() || myPlayer().isMoving() || myPlayer().isUnderAttack()) {

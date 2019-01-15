@@ -97,7 +97,7 @@ public class Main extends Script {
 		GroundItem ground = getGroundItems().closest(
 				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
 						&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
-								|| n.getName().contains("Rune") || n.getName().contains("arrow")
+								|| n.getName().contains("rune") || n.getName().contains("arrow")
 								|| n.getDefinition().isNoted())); // || n.hasAction("Eat", "Drink")));
 
 		// enable running

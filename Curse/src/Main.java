@@ -62,7 +62,7 @@ public class Main extends Script {
 		@SuppressWarnings("unchecked")
 		NPC npc = npcs.closest(n -> n != null && n.getName().contains(npcName) && !n.getName().contains(nonNpcName)
 				&& !n.isHitBarVisible() && n.getHealthPercent() > 0 && !n.isUnderAttack() && n.isAttackable());
-		boolean ableToCast = getMagic().canCast(spell);
+		boolean ableToCast = magic.canCast(spell);
 
 		// no runes in backpack
 		if (!ableToCast) {
@@ -81,7 +81,7 @@ public class Main extends Script {
 		}
 
 		// attack
-		getMagic().castSpellOnEntity(spell, npc);
+		magic.castSpellOnEntity(spell, npc);
 		sleep(random(600, 800));
 
 		return nextLoop();

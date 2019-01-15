@@ -30,15 +30,7 @@ public class Main extends Script {
 		isRanged = equipment.getItemInSlot(EquipmentSlot.WEAPON.slot).getName().contains("bow");
 		ammo = equipment.getItemInSlot(EquipmentSlot.ARROWS.slot);
 		int mode = configs.get(43);
-		switch (mode) {
-		case 1:
-			skill = Skill.STRENGTH;
-		case 3:
-			skill = Skill.DEFENCE;
-		default:
-			skill = Skill.ATTACK;
-		}
-		skill = isRanged ? Skill.RANGED : skill;
+		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
 		experienceTracker.start(skill);
 		tabs.open(Tab.SKILLS);
 		sleep(1000);
@@ -61,7 +53,7 @@ public class Main extends Script {
 	public void onPaint(Graphics2D g) {
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		g.drawString("Time -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 30);
+		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 30);
 		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill) + 1) + " ("
 				+ String.valueOf(combat.getCombatLevel()) + ") "
 				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 45);

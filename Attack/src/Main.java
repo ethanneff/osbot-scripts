@@ -83,13 +83,14 @@ public class Main extends Script {
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		NPC npc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible() && n.getHealthPercent() > 0
-				&& !n.isUnderAttack() && n.isAttackable() && !n.getName().contains("Rat")
+				&& !n.isUnderAttack() && n.isAttackable() && !n.getName().contains("Rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
 		GroundItem ground = getGroundItems().closest(n -> n != null
 				&& (n.getPosition().distance(myPlayer().getPosition()) <= distance)
 				&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
 						|| n.getName().contains("Rune") || n.getName().contains("arrow") || n.getDefinition().isNoted()
 						|| n.getName().contains("Cooked") || n.hasAction("Eat", "Drink")));
+				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {

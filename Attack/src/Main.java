@@ -54,7 +54,7 @@ public class Main extends Script {
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
 		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 30);
-		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill) + 1) + " ("
+		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill)) + " ("
 				+ String.valueOf(combat.getCombatLevel()) + ") "
 				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 45);
 		g.drawString("Gained -> " + String.valueOf(experienceTracker.getGainedLevels(skill)) + " "

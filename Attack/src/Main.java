@@ -5,6 +5,7 @@
 // TODO: lowhp causes infinite loop
 // TODO: needs escape if not action after time period (stuck)
 // TODO: needs to not pick up items if inventory full
+// TODO: world hop
 
 import java.awt.Color;
 import java.awt.Font;

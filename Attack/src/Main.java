@@ -1,5 +1,7 @@
 
 // TODO: still click on doors
+// TODO: need to figure out best way to do myPlayer().isUnderAttack() to keep hitting target
+// TODO: need to figure out how to make script work when npc attack first
 // TODO: does not capture change in attack
 // TODO: still attacks multiple enemies if already attacked
 // TODO: lowhp causes infinite loop
@@ -142,11 +144,11 @@ public class Main extends Script {
 			camera.toTop();
 		}
 
-		// fighting
-		if (target != null && target.isInteracting(myPlayer())) {
-			return nextLoop();
-		}
-		target = null;
+//		// fighting
+//		if (target != null && target.isInteracting(myPlayer())) {
+//			return nextLoop();
+//		}
+//		target = null;
 
 		// player busy
 		if (myPlayer().isAnimating() || myPlayer().isMoving() || myPlayer().isUnderAttack()) {
@@ -155,7 +157,7 @@ public class Main extends Script {
 
 		// attack npc
 		npc.interact("Attack");
-		target = npc;
+//		target = npc;
 		waitForNpcToRespond();
 		return nextLoop();
 	}

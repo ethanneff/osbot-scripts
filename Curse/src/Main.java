@@ -45,11 +45,19 @@ public class Main extends Script {
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
 		g.drawString("Curse everything", 2, 230);
-		g.drawString("Elapsed time:         \t" + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 250);
-		g.drawString("Current level:         \t" + String.valueOf(skills.getStatic(skill)) + "\t" + String.valueOf(skills.getExperience(skill)), 2, 270);
-		g.drawString("Next level:             \t" + String.valueOf(skills.getStatic(skill)+ 1) + "\t" + String.valueOf(skills.experienceToLevel(skill)) + "\t" + String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 290);
-		g.drawString("Experience gained: \t" + String.valueOf(experienceTracker.getGainedLevels(skill)) + "\t" + String.valueOf(experienceTracker.getGainedXP(skill)) + "\t" + String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 310);
-		g.drawString("Spells used:           \t" + String.valueOf(startAmount - currentAmount) + "\t" + String.valueOf(currentAmount) + "\t" + String.valueOf(currentAmount - skills.experienceToLevel(skill)/experiencePerSpell) , 2, 330);
+		g.drawString("Elapsed time:         \t" + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2,
+				250);
+		g.drawString("Current level:         \t" + String.valueOf(skills.getStatic(skill)) + "\t"
+				+ String.valueOf(skills.getExperience(skill)), 2, 270);
+		g.drawString("Next level:             \t" + String.valueOf(skills.getStatic(skill) + 1) + "\t"
+				+ String.valueOf(skills.experienceToLevel(skill)) + "\t"
+				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 290);
+		g.drawString("Experience gained: \t" + String.valueOf(experienceTracker.getGainedLevels(skill)) + "\t"
+				+ String.valueOf(experienceTracker.getGainedXP(skill)) + "\t"
+				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 310);
+		g.drawString("Spells used:           \t" + String.valueOf(startAmount - currentAmount) + "\t"
+				+ String.valueOf(currentAmount) + "\t"
+				+ String.valueOf(currentAmount - skills.experienceToLevel(skill) / experiencePerSpell), 2, 330);
 	}
 
 	public int nextLoop() {

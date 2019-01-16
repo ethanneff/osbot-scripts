@@ -144,6 +144,12 @@ public class Main extends Script {
 			camera.toTop();
 		}
 
+//		// reconnect
+//		if (!myPlayer().isInteracting(target)) {
+//			target.interact("Attack");
+//			return nextLoop();
+//		}
+
 //		// fighting
 //		if (target != null && target.isInteracting(myPlayer())) {
 //			return nextLoop();

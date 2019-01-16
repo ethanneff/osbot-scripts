@@ -106,7 +106,7 @@ public class Main extends Script {
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			settings.setRunning(true);
 		}
-//
+
 //		// low hp logout
 //		if (lowHp && food == null) {
 //			if (magic.canCast(teleport)) {
@@ -140,30 +140,29 @@ public class Main extends Script {
 
 		// find npc
 		if (npc != null && !npc.isVisible()) {
-//			camera.toEntity(npc);
 			camera.toTop();
 		}
 
-//		// reconnect
-//		if (!myPlayer().isInteracting(target)) {
-//			target.interact("Attack");
-//			return nextLoop();
-//		}
+		// reset
+		if (target != null && !target.isInteracting(myPlayer())) {
+			target = null;
+		}
 
-//		// fighting
-//		if (target != null && target.isInteracting(myPlayer())) {
-//			return nextLoop();
-//		}
-//		target = null;
+		// reconnect
+		if (target != null && !myPlayer().isInteracting(target) && target.isInteracting(myPlayer())) {
+			target.interact("Attack");
+			waitForNpcToRespond();
+			return nextLoop();
+		}
 
 		// player busy
-		if (myPlayer().isAnimating() || myPlayer().isMoving() || myPlayer().isUnderAttack()) {
+		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting()) {// myPlayer().isUnderAttack()) {
 			return nextLoop();
 		}
 
 		// attack npc
 		npc.interact("Attack");
-//		target = npc;
+		target = npc;
 		waitForNpcToRespond();
 		return nextLoop();
 	}

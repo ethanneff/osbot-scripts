@@ -100,7 +100,7 @@ public class Main extends Script {
 				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
 						&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
 								|| n.getName().contains("rune") || n.getName().contains("arrow")
-								|| n.getDefinition().isNoted())); // || n.hasAction("Eat", "Drink")));
+								|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {

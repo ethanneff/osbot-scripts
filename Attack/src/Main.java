@@ -28,7 +28,7 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// config
 	private Skill skill = Skill.STRENGTH;
-	private boolean enableCoin = false;
+	private boolean enableCoin = true;
 	private boolean enablePickup = true;
 	private NPC target;
 	private Item ammo;
@@ -99,8 +99,10 @@ public class Main extends Script {
 		GroundItem ground = getGroundItems().closest(
 				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
 						&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
-								|| n.getName().contains("rune") || n.getName().contains("arrow")
-								|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
+								|| n.getName().contains("Snapdragon") || n.getName().contains("Ranarr")
+								|| n.getName().contains("Torstol") || n.getName().contains("rune")
+								|| n.getName().contains("arrow") || n.getDefinition().isNoted()
+								|| n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {

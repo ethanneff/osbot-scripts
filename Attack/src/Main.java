@@ -145,6 +145,11 @@ public class Main extends Script {
 			camera.toTop();
 		}
 
+		// enable special attack
+		if (combat.getSpecialPercentage() == 100 && !combat.isSpecialActivated()) {
+			combat.toggleSpecialAttack(true);
+		}
+
 		// reset
 		if (target != null && !target.isInteracting(myPlayer())) {
 			target = null;

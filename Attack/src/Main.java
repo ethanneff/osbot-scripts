@@ -38,7 +38,7 @@ public class Main extends Script {
 
 	@Override
 	public void onStart() throws InterruptedException {
-		isRanged = equipment.getItemInSlot(EquipmentSlot.WEAPON.slot).getName().contains("bow");
+		isRanged = equipment.getItemInSlot(EquipmentSlot.WEAPON.slot).getName().toLowerCase().contains("bow");
 		ammo = equipment.getItemInSlot(EquipmentSlot.ARROWS.slot);
 		int mode = configs.get(43);
 		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
@@ -94,15 +94,16 @@ public class Main extends Script {
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		NPC npc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible() && n.getHealthPercent() > 0
-				&& !n.isUnderAttack() && !n.getName().contains("Rat") && map.canReach(n)
+				&& !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
-		GroundItem ground = getGroundItems().closest(
-				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
-						&& ((enableCoin && n.getName().contains("Coin")) || n.getName().contains("Big bones")
-								|| n.getName().contains("Snapdragon") || n.getName().contains("Ranarr")
-								|| n.getName().contains("Torstol") || n.getName().contains("rune")
-								|| n.getName().contains("arrow") || n.getDefinition().isNoted()
-								|| n.hasAction("Eat", "Drink")));
+		GroundItem ground = getGroundItems().closest(n -> n != null
+				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
+				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
+						|| n.getName().toLowerCase().contains("big bones")
+						|| n.getName().toLowerCase().contains("snapdragon")
+						|| n.getName().toLowerCase().contains("ranarr") || n.getName().toLowerCase().contains("torstol")
+						|| n.getName().toLowerCase().contains("rune") || n.getName().toLowerCase().contains("arrow")
+						|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {

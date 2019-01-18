@@ -36,6 +36,7 @@ public class Main extends Script {
 	private boolean isRanged;
 	private int distance = 7;
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
+	private long lastAttack;
 
 	@Override
 	public void onStart() throws InterruptedException {
@@ -109,6 +110,18 @@ public class Main extends Script {
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			settings.setRunning(true);
+		}
+
+		// record last attack
+		long currentTime = System.nanoTime();
+		if (combat.getFighting().isHitBarVisible()) {
+			lastAttack = currentTime;
+		}
+
+		// logout if no attack
+		long seconds = (currentTime - lastAttack) / 1000000000;
+		if (seconds > 30) {
+			stop();
 		}
 
 //		// low hp logout

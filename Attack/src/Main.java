@@ -1,5 +1,6 @@
 
 // TODO: still click on doors
+// TODO: if no healthbar in 1 minute, logout
 // TODO: need to figure out best way to do myPlayer().isUnderAttack() to keep hitting target
 // TODO: need to figure out how to make script work when npc attack first
 // TODO: does not capture change in attack

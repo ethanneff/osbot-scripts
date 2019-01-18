@@ -171,7 +171,7 @@ public class Main extends Script {
 			target = null;
 		}
 
-		// reconnect
+		// re-attack
 		if (target != null && !myPlayer().isInteracting(target) && target.isInteracting(myPlayer())) {
 			target.interact("Attack");
 			waitForNpcToRespond();

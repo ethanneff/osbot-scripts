@@ -103,9 +103,11 @@ public class Main extends Script {
 				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
 						|| n.getName().toLowerCase().contains("big bones")
 						|| n.getName().toLowerCase().contains("snapdragon")
-						|| n.getName().toLowerCase().contains("ranarr") || n.getName().toLowerCase().contains("torstol")
-						|| n.getName().toLowerCase().contains("rune") || n.getName().toLowerCase().contains("arrow")
-						|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
+						|| n.getName().toLowerCase().contains("half") || n.getName().toLowerCase().contains("ranarr")
+						|| n.getName().toLowerCase().contains("torstol") || n.getName().toLowerCase().contains("key")
+						|| n.getName().toLowerCase().contains("rune") || n.getName().toLowerCase().contains("dragon")
+						|| n.getName().toLowerCase().contains("arrow") || n.getDefinition().isNoted()
+						|| n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {

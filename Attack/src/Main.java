@@ -45,6 +45,7 @@ public class Main extends Script {
 		int mode = configs.get(43);
 		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
 		experienceTracker.start(skill);
+		lastAttack = System.nanoTime();
 		tabs.open(Tab.INVENTORY);
 		sleep(1000);
 	}
@@ -114,27 +115,37 @@ public class Main extends Script {
 			settings.setRunning(true);
 		}
 
-		// record last attack
-		long currentTime = System.nanoTime();
-		if (combat.getFighting().isHitBarVisible()) {
-			lastAttack = currentTime;
-		}
-
-		// logout if no attack
-		long seconds = (currentTime - lastAttack) / 1000000000;
-		if (seconds > 30) {
+		// stop if full
+		if (inventory.isFull()) {
 			stop();
+			preventDoubleClick();
+			return nextLoop();
+
 		}
 
-//		// low hp logout
-//		if (lowHp && food == null) {
-//			if (magic.canCast(teleport)) {
-//				magic.castSpell(teleport);
-//				preventDoubleClick();
-//			}
+		// record last attack
+//		long currentTime = System.nanoTime();
+//		if (combat.getFighting().isHitBarVisible()) {
+//			lastAttack = currentTime;
+//		}
+
+//		// logout if no attack
+//		long seconds = (currentTime - lastAttack) / 1000000000;
+//		if (seconds > 30) {
 //			stop();
 //		}
-//
+
+		// low hp logout
+		if (lowHp && food == null) {
+			if (magic.canCast(teleport)) {
+				magic.castSpell(teleport);
+				preventDoubleClick();
+			}
+			stop();			preventDoubleClick();
+			return nextLoop();
+		}
+		
+
 		// low hp eat
 		if (lowHp && food != null) {
 			food.interact("Eat", "Drink");

@@ -14,9 +14,11 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import org.osbot.rs07.api.model.Entity;
 import org.osbot.rs07.api.model.GroundItem;
 import org.osbot.rs07.api.model.Item;
 import org.osbot.rs07.api.model.NPC;
+import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.EquipmentSlot;
 import org.osbot.rs07.api.ui.MagicSpell;
 import org.osbot.rs07.api.ui.Skill;
@@ -31,6 +33,10 @@ public class Main extends Script {
 	private Skill skill = Skill.STRENGTH;
 	private boolean enableCoin = true;
 	private boolean enablePickup = true;
+	private boolean enableBones = true;
+	private boolean enableHerbs = false;
+	private boolean enableAlch = false;
+	private boolean enableAttack = true;
 	private NPC target;
 	private Item ammo;
 	private boolean isRanged;
@@ -96,19 +102,33 @@ public class Main extends Script {
 		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) / 2;
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
+		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		NPC npc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible() && n.getHealthPercent() > 0
 				&& !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
-		GroundItem ground = getGroundItems().closest(n -> n != null
-				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
-				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
-						|| n.getName().toLowerCase().contains("big bones")
-						|| n.getName().toLowerCase().contains("snapdragon")
-						|| n.getName().toLowerCase().contains("half") || n.getName().toLowerCase().contains("ranarr")
-						|| n.getName().toLowerCase().contains("torstol") || n.getName().toLowerCase().contains("key")
-						|| n.getName().toLowerCase().contains("rune") || n.getName().toLowerCase().contains("dragon")
-						|| n.getName().toLowerCase().contains("arrow") || n.getDefinition().isNoted()
-						|| n.hasAction("Eat", "Drink")));
+		GroundItem ground = getGroundItems().closest(
+				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
+						&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
+								|| (enableBones && n.getName().toLowerCase().contains("big bones"))
+								|| (enableHerbs && (n.getName().toLowerCase().contains("grimy")
+										|| !n.getName().toLowerCase().contains("guam")
+										|| !n.getName().toLowerCase().contains("marrentill")
+										|| !n.getName().toLowerCase().contains("tarromin")))
+								|| n.getName().toLowerCase().contains("defender")
+								|| n.getName().toLowerCase().contains("token")
+								|| (enableAlch && (n.getName().toLowerCase().contains("black")
+										|| n.getName().toLowerCase().contains("mithril")
+										|| n.getName().toLowerCase().contains("adamant")))
+								|| n.getName().toLowerCase().contains("snapdragon")
+								|| n.getName().toLowerCase().contains("half")
+								|| n.getName().toLowerCase().contains("ranarr")
+								|| n.getName().toLowerCase().contains("torstol")
+								|| n.getName().toLowerCase().contains("snape grass")
+								|| n.getName().toLowerCase().contains("key")
+								|| n.getName().toLowerCase().contains("rune")
+								|| n.getName().toLowerCase().contains("dragon")
+								|| n.getName().toLowerCase().contains("arrow") || n.getDefinition().isNoted()
+								|| n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
@@ -117,11 +137,11 @@ public class Main extends Script {
 			return nextLoop();
 		}
 
-		// stop if full
-		if (inventory.isFull()) {
+		if (mod != null) {
 			stop();
 			preventDoubleClick();
 			return nextLoop();
+		}
 
 		// stop if full
 //		if (inventory.isFull()) {

@@ -206,7 +206,6 @@ public class Main extends Script {
 			return nextLoop();
 		}
 
-		// attack npc
 		npc.interact("Attack");
 		target = npc;
 		waitForNpcToRespond();

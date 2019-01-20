@@ -115,8 +115,7 @@ public class Main extends Script {
 		} else if (myPlayer().isMoving() || myPlayer().isAnimating()) {
 			// moving
 			lastMovement = currentTime;
-		} else if (playerFell && o1 != null) {
-			o1.interact("Climb");
+			return tick();
 		} else if (playerFell && o1 == null) {
 			walking.webWalk(p0);
 		} else if (nearPosition(current, p1) && o2 != null) {

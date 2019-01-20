@@ -75,6 +75,7 @@ public class Main extends Script {
 		Position p4 = new Position(3088, 3261, 3);
 		Position p5 = new Position(3088, 3255, 3);
 		Position p6 = new Position(3096, 3256, 3);
+		Position p7 = new Position(3103, 3261, 0);
 		Position current = myPlayer().getPosition();
 		Entity o1 = objects.closest("Rough wall");
 		Entity o2 = objects.closest("Tightrope");
@@ -118,6 +119,8 @@ public class Main extends Script {
 			return tick();
 		} else if (playerFell && o1 == null) {
 			walking.webWalk(p0);
+		} else if (playerFell && o1 != null) {
+			o1.interact("Climb");
 		} else if (nearPosition(current, p1) && o2 != null) {
 			o2.interact("Cross");
 		} else if (nearPosition(current, p2) && o2 != null) {
@@ -130,6 +133,8 @@ public class Main extends Script {
 			o5.interact("Jump");
 		} else if (nearPosition(current, p6) && o6 != null) {
 			o6.interact("Climb-down");
+		} else if (nearPosition(current, p7)) {
+			walking.webWalk(p0);
 		}
 
 		interact();

@@ -106,6 +106,12 @@ public class Main extends Script {
 			return tick();
 		}
 
+		if (myPlayer().isMoving() || myPlayer().isAnimating()) {
+			// moving
+			lastMovement = currentTime;
+			return tick();
+		}
+
 		// agility
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			// enable running
@@ -113,10 +119,6 @@ public class Main extends Script {
 		} else if (ground != null) {
 			// mark of grace
 			ground.interact("Take");
-		} else if (myPlayer().isMoving() || myPlayer().isAnimating()) {
-			// moving
-			lastMovement = currentTime;
-			return tick();
 		} else if (playerFell && o1 == null) {
 			walking.webWalk(p0);
 		} else if (playerFell && o1 != null) {

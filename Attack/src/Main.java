@@ -113,6 +113,8 @@ public class Main extends Script {
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			settings.setRunning(true);
+			preventDoubleClick();
+			return nextLoop();
 		}
 
 		// stop if full

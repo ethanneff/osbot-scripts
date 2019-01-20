@@ -161,7 +161,7 @@ public class Main extends Script {
 		}
 
 		// bury
-		if (bone != null) {
+		if (enableBones && bone != null) {
 			bone.interact("Bury");
 			preventDoubleClick();
 			return nextLoop();

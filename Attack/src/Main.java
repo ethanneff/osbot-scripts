@@ -147,7 +147,8 @@ public class Main extends Script {
 				magic.castSpell(teleport);
 				preventDoubleClick();
 			}
-			stop();			preventDoubleClick();
+			stop();
+			preventDoubleClick();
 			return nextLoop();
 		}
 		

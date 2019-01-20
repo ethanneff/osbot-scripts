@@ -127,6 +127,16 @@ public class Main extends Script {
 //			preventDoubleClick();
 //			return nextLoop();
 //		}
+
+		// warriors guild
+		if (inventory.contains("Black full helm") && inventory.contains("Black platebody")
+				&& inventory.contains("Black platelegs")) {
+			Entity animator = objects.closest("Magical Animator");
+			if (animator != null) {
+				animator.interact("Animate");
+				preventDoubleClick();
+				return nextLoop();
+			}
 		}
 
 		// record last attack

@@ -184,6 +184,11 @@ public class Main extends Script {
 			combat.toggleSpecialAttack(true);
 		}
 
+		// attack npc
+		if (!enableAttack) {
+			return nextLoop();
+		}
+
 		// reset
 		if (target != null && !target.isInteracting(myPlayer())) {
 			target = null;

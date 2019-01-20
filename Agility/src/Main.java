@@ -17,14 +17,6 @@ public class Main extends Script {
 	private Skill skill = Skill.AGILITY;
 	private long lastMovement;
 
-	@Override
-	public void onStart() throws InterruptedException {
-		lastMovement = System.nanoTime();
-		experienceTracker.start(skill);
-		tabs.open(Tab.INVENTORY);
-		interact();
-	}
-
 	private int tick() {
 		return random(100, 300);
 	}
@@ -46,6 +38,18 @@ public class Main extends Script {
 		return String.format("%02d:%02d:%02d", h, m, s);
 	}
 
+	private boolean nearPosition(Position to, Position from) {
+		return to.distance(from) < 6;
+	}
+
+	@Override
+	public void onStart() throws InterruptedException {
+		lastMovement = System.nanoTime();
+		experienceTracker.start(skill);
+		tabs.open(Tab.INVENTORY);
+		interact();
+	}
+
 	@Override
 	public void onPaint(Graphics2D g) {
 		g.setColor(new Color(255, 255, 255));
@@ -57,10 +61,6 @@ public class Main extends Script {
 				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
 				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 60);
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
-	}
-
-	private boolean nearPosition(Position to, Position from) {
-		return to.distance(from) < 6;
 	}
 
 	@Override

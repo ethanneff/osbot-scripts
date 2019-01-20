@@ -121,6 +121,12 @@ public class Main extends Script {
 			preventDoubleClick();
 			return nextLoop();
 
+		// stop if full
+//		if (inventory.isFull()) {
+//			stop();
+//			preventDoubleClick();
+//			return nextLoop();
+//		}
 		}
 
 		// record last attack

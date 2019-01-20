@@ -11,7 +11,7 @@ import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
 import org.osbot.rs07.script.ScriptManifest;
 
-@ScriptManifest(author = "Noob", name = "Smelt", version = -15.0, logo = "", info = "Does some noob shit")
+@ScriptManifest(author = "Me", name = "Smelt", version = -15.0, logo = "", info = "Does some noob shit")
 public class Main extends Script {
 
 	private long lastMovement;
@@ -26,15 +26,15 @@ public class Main extends Script {
 		sleep(1000);
 	}
 
-	public int tick() {
+	private int tick() {
 		return random(100, 300);
 	}
 
-	public void interact() throws InterruptedException {
+	private void interact() throws InterruptedException {
 		sleep(random(1000, 1500));
 	}
 
-	public final String formatTime(final long ms) {
+	private final String formatTime(final long ms) {
 		long s = ms / 1000, m = s / 60, h = m / 60;
 		s %= 60;
 		m %= 60;

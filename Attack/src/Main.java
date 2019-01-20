@@ -151,7 +151,6 @@ public class Main extends Script {
 			preventDoubleClick();
 			return nextLoop();
 		}
-		
 
 		// low hp eat
 		if (lowHp && food != null) {

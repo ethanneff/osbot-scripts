@@ -68,7 +68,7 @@ public class Main extends Script {
 	public int onLoop() throws InterruptedException {
 
 		// draynor spots
-		Position p0 = new Position(3103, 3279, 0);
+		Position p0 = new Position(3105, 3278, 0);
 		Position p1 = new Position(3102, 3279, 3);
 		Position p2 = new Position(3090, 3276, 3);
 		Position p3 = new Position(3092, 3266, 3);

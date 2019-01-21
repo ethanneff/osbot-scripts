@@ -163,7 +163,7 @@ public class Main extends Script {
 		}
 
 		// wait for action after movement
-		if (secondsSinceLastMovement < 1) {
+		if (secondsSinceLastMovement < 0.5) {
 			return tick();
 		}
 

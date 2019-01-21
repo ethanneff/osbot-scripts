@@ -71,17 +71,19 @@ public class Main extends Script {
 	public int onLoop() throws InterruptedException {
 
 		// obstacles
-		Entity o1 = objects.closest("Rough wall");
-		Entity o2 = objects.closest("Tightrope");
-		Entity o3 = objects.closest("Narrow wall");
-		Entity o4 = objects.closest("Wall");
-		Entity o5 = objects.closest("Gap");
-		Entity o6 = objects.closest("Crate");
-		Entity o7 = objects.closest("Clothes line");
-		Entity o8 = objects.closest("Ledge");
-		Entity o9 = objects.closest("Edge");
+		Entity o01 = objects.closest("Rough wall");
+		Entity o02 = objects.closest("Tightrope");
+		Entity o03 = objects.closest("Narrow wall");
+		Entity o04 = objects.closest("Wall");
+		Entity o05 = objects.closest("Gap");
+		Entity o06 = objects.closest("Crate");
+		Entity o07 = objects.closest("Clothes line");
+		Entity o08 = objects.closest("Ledge");
+		Entity o09 = objects.closest("Edge");
+		Entity o10 = objects.closest("Tall tree");
+		Entity o11 = objects.closest("Pole-vault");
 
-		// positions
+		// varrock
 		Position vp00 = new Position(3221, 3414, 0); // start
 		Position vp01 = new Position(3208, 3396, 3); // walk
 		Position vp02 = new Position(3232, 3402, 3); // walk
@@ -97,6 +99,23 @@ public class Main extends Script {
 		Area va09 = new Area(3231, 3391, 3232, 3404).setPlane(3); // leap
 		Area va10 = new Area(3235, 3402, 3241, 3408).setPlane(3); // hurdle
 		Area va11 = new Area(3235, 3410, 3241, 3416).setPlane(3); // jump off
+
+		// canifis
+		Position cp00 = new Position(3505, 3488, 0); // start
+		Position cp01 = new Position(3498, 3504, 2); // walk
+		Position cp02 = new Position(3487, 3499, 2); // walk
+		Position cp03 = new Position(3502, 3476, 3); // walk
+		Area ca00 = new Area(3470, 3465, 3519, 3510); // canifis
+		Area ca01 = new Area(3503, 3490, 3511, 3498).setPlane(2);
+		Area ca02 = new Area(3499, 3501, 3504, 3509).setPlane(2);
+		Area ca025 = new Area(3495, 3500, 3498, 3509).setPlane(2);
+		Area ca03 = new Area(3489, 3496, 3493, 3511).setPlane(2);
+		Area ca035 = new Area(3484, 3496, 3488, 3506).setPlane(2);
+		Area ca04 = new Area(3473, 3489, 3480, 3500).setPlane(3);
+		Area ca05 = new Area(3475, 3479, 3485, 3488).setPlane(2); // pole
+		Area ca06 = new Area(3486, 3467, 3500, 3480).setPlane(3); // move
+		Area ca07 = new Area(3501, 3468, 3504, 3479).setPlane(3);
+		Area ca08 = new Area(3507, 3473, 3516, 3483).setPlane(2);
 
 //		// draynor
 //		Position d0 = new Position(3105, 3278, 0);
@@ -177,29 +196,58 @@ public class Main extends Script {
 		// varrock
 		if (va00.contains(myPlayer()) && vp00.distance(myPlayer()) > 10) {
 			walking.webWalk(vp00);
-		} else if (va00.contains(myPlayer()) && o1 != null) {
-			o1.interact("Climb");
-		} else if (va01.contains(myPlayer()) && o7 != null) {
-			o7.interact("Cross");
-		} else if (va02.contains(myPlayer()) && o5 != null) {
-			o5.interact("Leap");
-		} else if (va03.contains(myPlayer()) && o4 != null) {
-			o4.interact("Balance");
-		} else if (va04.contains(myPlayer()) && o5 != null) {
-			o5.interact("Leap");
+		} else if (va00.contains(myPlayer()) && o01 != null) {
+			o01.interact("Climb");
+		} else if (va01.contains(myPlayer()) && o07 != null) {
+			o07.interact("Cross");
+		} else if (va02.contains(myPlayer()) && o05 != null) {
+			o05.interact("Leap");
+		} else if (va03.contains(myPlayer()) && o04 != null) {
+			o04.interact("Balance");
+		} else if (va04.contains(myPlayer()) && o05 != null) {
+			o05.interact("Leap");
 		} else if ((va05.contains(myPlayer()) || va06.contains(myPlayer()))) {
 			walking.webWalk(vp01);
-		} else if (va07.contains(myPlayer()) && o5 != null) {
-			o5.interact("Leap");
+		} else if (va07.contains(myPlayer()) && o05 != null) {
+			o05.interact("Leap");
 		} else if (va08.contains(myPlayer())) {
 			walking.webWalk(vp02);
-		} else if (va09.contains(myPlayer()) && o5 != null) {
-			o5.interact("Leap");
-		} else if (va10.contains(myPlayer()) && o8 != null) {
-			o8.interact("Hurdle");
-		} else if (va11.contains(myPlayer()) && o9 != null) {
-			o9.interact("Jump-off");
-		} else {
+		} else if (va09.contains(myPlayer()) && o05 != null) {
+			o05.interact("Leap");
+		} else if (va10.contains(myPlayer()) && o08 != null) {
+			o08.interact("Hurdle");
+		} else if (va11.contains(myPlayer()) && o09 != null) {
+			o09.interact("Jump-off");
+		}
+
+		// canifis
+		else if (ca00.contains(myPlayer()) && cp00.distance(myPlayer()) > 10) {
+			walking.webWalk(cp00);
+		} else if (ca00.contains(myPlayer()) && o10 != null) {
+			o10.interact("Climb");
+		} else if (ca01.contains(myPlayer()) && o05 != null) {
+			o05.interact("Jump");
+		} else if (ca02.contains(myPlayer())) {
+			walking.webWalk(cp01);
+		} else if (ca025.contains(myPlayer()) && o05 != null) {
+			o05.interact("Jump");
+		} else if (ca03.contains(myPlayer())) {
+			walking.webWalk(cp02);
+		} else if (ca035.contains(myPlayer()) && o05 != null) {
+			o05.interact("Jump");
+		} else if (ca04.contains(myPlayer()) && o05 != null) {
+			o05.interact("Jump");
+		} else if (ca05.contains(myPlayer()) && o11 != null) {
+			o11.interact("Vault");
+		} else if (ca06.contains(myPlayer())) {
+			walking.webWalk(cp03);
+		} else if (ca07.contains(myPlayer()) && o05 != null) {
+			o05.interact("Jump");
+		} else if (ca08.contains(myPlayer()) && o05 != null) {
+			o05.interact("Jump");
+		}
+
+		else {
 			kill();
 		}
 

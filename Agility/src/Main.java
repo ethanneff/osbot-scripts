@@ -70,6 +70,10 @@ public class Main extends Script {
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
 
+//		Entity a = objects.closest(n -> n.getId() == 10821);
+//		a.interact("Jump");
+//		stop();
+
 		// obstacles
 		Entity o01 = objects.closest("Rough wall");
 		Entity o02 = objects.closest("Tightrope");
@@ -102,20 +106,14 @@ public class Main extends Script {
 
 		// canifis
 		Position cp00 = new Position(3505, 3488, 0); // start
-		Position cp01 = new Position(3498, 3504, 2); // walk
-		Position cp02 = new Position(3487, 3499, 2); // walk
-		Position cp03 = new Position(3502, 3476, 3); // walk
 		Area ca00 = new Area(3470, 3465, 3519, 3510); // canifis
 		Area ca01 = new Area(3503, 3490, 3511, 3498).setPlane(2);
-		Area ca02 = new Area(3499, 3502, 3504, 3508).setPlane(2); // move
-		Area ca03 = new Area(3495, 3502, 3498, 3507).setPlane(2);
-		Area ca04 = new Area(3489, 3496, 3493, 3511).setPlane(2); // move
-		Area ca05 = new Area(3484, 3496, 3488, 3506).setPlane(2);
-		Area ca06 = new Area(3473, 3489, 3480, 3500).setPlane(3);
-		Area ca07 = new Area(3475, 3479, 3485, 3488).setPlane(2); // pole
-		Area ca08 = new Area(3486, 3467, 3500, 3480).setPlane(3); // move
-		Area ca09 = new Area(3501, 3468, 3504, 3479).setPlane(3);
-		Area ca10 = new Area(3507, 3473, 3516, 3483).setPlane(2);
+		Area ca02 = new Area(3495, 3501, 3504, 3508).setPlane(2);
+		Area ca03 = new Area(3484, 3497, 3493, 3505).setPlane(2);
+		Area ca04 = new Area(3473, 3489, 3480, 3500).setPlane(3);
+		Area ca05 = new Area(3475, 3479, 3485, 3488).setPlane(2);
+		Area ca06 = new Area(3486, 3467, 3504, 3479).setPlane(3);
+		Area ca07 = new Area(3507, 3473, 3516, 3483).setPlane(2);
 
 //		// draynor
 //		Position d0 = new Position(3105, 3278, 0);
@@ -182,7 +180,7 @@ public class Main extends Script {
 		}
 
 		// wait for action after movement
-		if (secondsSinceLastMovement < 0.5) {
+		if (secondsSinceLastMovement < 1) {
 			return tick();
 		}
 
@@ -223,28 +221,22 @@ public class Main extends Script {
 		// canifis
 		else if (ca00.contains(myPlayer()) && cp00.distance(myPlayer()) > 10) {
 			walking.webWalk(cp00);
-		} else if (ca00.contains(myPlayer()) && o10 != null) {
-			o10.interact("Climb");
-		} else if (ca01.contains(myPlayer()) && o05 != null) {
-			o05.interact("Jump");
+		} else if (ca00.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 10819).interact("Climb");
+		} else if (ca01.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 10820).interact("Jump");
 		} else if (ca02.contains(myPlayer())) {
-			walking.walk(cp01);
-		} else if (ca03.contains(myPlayer()) && o05 != null) {
-			o05.interact("Jump");
+			objects.closest(n -> n.getId() == 10821).interact("Jump");
+		} else if (ca03.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 10828).interact("Jump");
 		} else if (ca04.contains(myPlayer())) {
-			walking.walk(cp02);
-		} else if (ca05.contains(myPlayer()) && o05 != null) {
-			o05.interact("Jump");
-		} else if (ca06.contains(myPlayer()) && o05 != null) {
-			o05.interact("Jump");
-		} else if (ca07.contains(myPlayer()) && o11 != null) {
-			o11.interact("Vault");
-		} else if (ca08.contains(myPlayer())) {
-			walking.webWalk(cp03);
-		} else if (ca09.contains(myPlayer()) && o05 != null) {
-			o05.interact("Jump");
-		} else if (ca10.contains(myPlayer()) && o05 != null) {
-			o05.interact("Jump");
+			objects.closest(n -> n.getId() == 10822).interact("Jump");
+		} else if (ca05.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 10831).interact("Vault");
+		} else if (ca06.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 10823).interact("Jump");
+		} else if (ca07.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 10832).interact("Jump");
 		}
 
 		else {

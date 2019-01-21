@@ -85,6 +85,7 @@ public class Main extends Script {
 		Position vp00 = new Position(3221, 3414, 0); // start
 		Position vp01 = new Position(3208, 3396, 3); // walk
 		Position vp02 = new Position(3232, 3402, 3); // walk
+		Area va00 = new Area(3183, 3380, 3250, 3435); // varrock
 		Area va01 = new Area(3212, 3409, 3220, 3420).setPlane(3); // cross
 		Area va02 = new Area(3201, 3412, 3209, 3420).setPlane(3); // leap
 		Area va03 = new Area(3191, 3414, 3198, 3417).setPlane(1); // balance
@@ -129,7 +130,6 @@ public class Main extends Script {
 //		}
 
 		// environment
-		Area va00 = new Area(3178, 3379, 3247, 3441);
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		GroundItem ground = getGroundItems()
 				.closest(n -> n != null && map.canReach(n) && n.getName().toLowerCase().contains("mark of grace"));
@@ -175,7 +175,9 @@ public class Main extends Script {
 		}
 
 		// varrock
-		if (va00.contains(myPlayer()) && o1 != null) {
+		if (va00.contains(myPlayer()) && vp00.distance(myPlayer()) > 10) {
+			walking.webWalk(vp00);
+		} else if (va00.contains(myPlayer()) && o1 != null) {
 			o1.interact("Climb");
 		} else if (va01.contains(myPlayer()) && o7 != null) {
 			o7.interact("Cross");
@@ -198,7 +200,7 @@ public class Main extends Script {
 		} else if (va11.contains(myPlayer()) && o9 != null) {
 			o9.interact("Jump-off");
 		} else {
-			walking.webWalk(vp00);
+			kill();
 		}
 
 		// action

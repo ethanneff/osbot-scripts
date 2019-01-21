@@ -107,15 +107,15 @@ public class Main extends Script {
 		Position cp03 = new Position(3502, 3476, 3); // walk
 		Area ca00 = new Area(3470, 3465, 3519, 3510); // canifis
 		Area ca01 = new Area(3503, 3490, 3511, 3498).setPlane(2);
-		Area ca02 = new Area(3499, 3501, 3504, 3509).setPlane(2);
-		Area ca025 = new Area(3495, 3500, 3498, 3509).setPlane(2);
-		Area ca03 = new Area(3489, 3496, 3493, 3511).setPlane(2);
-		Area ca035 = new Area(3484, 3496, 3488, 3506).setPlane(2);
-		Area ca04 = new Area(3473, 3489, 3480, 3500).setPlane(3);
-		Area ca05 = new Area(3475, 3479, 3485, 3488).setPlane(2); // pole
-		Area ca06 = new Area(3486, 3467, 3500, 3480).setPlane(3); // move
-		Area ca07 = new Area(3501, 3468, 3504, 3479).setPlane(3);
-		Area ca08 = new Area(3507, 3473, 3516, 3483).setPlane(2);
+		Area ca02 = new Area(3499, 3501, 3504, 3509).setPlane(2); // move
+		Area ca03 = new Area(3495, 3500, 3498, 3509).setPlane(2);
+		Area ca04 = new Area(3489, 3496, 3493, 3511).setPlane(2); // move
+		Area ca05 = new Area(3484, 3496, 3488, 3506).setPlane(2);
+		Area ca06 = new Area(3473, 3489, 3480, 3500).setPlane(3);
+		Area ca07 = new Area(3475, 3479, 3485, 3488).setPlane(2); // pole
+		Area ca08 = new Area(3486, 3467, 3500, 3480).setPlane(3); // move
+		Area ca09 = new Area(3501, 3468, 3504, 3479).setPlane(3);
+		Area ca10 = new Area(3507, 3473, 3516, 3483).setPlane(2);
 
 //		// draynor
 //		Position d0 = new Position(3105, 3278, 0);
@@ -229,21 +229,21 @@ public class Main extends Script {
 			o05.interact("Jump");
 		} else if (ca02.contains(myPlayer())) {
 			walking.webWalk(cp01);
-		} else if (ca025.contains(myPlayer()) && o05 != null) {
+		} else if (ca03.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
-		} else if (ca03.contains(myPlayer())) {
+		} else if (ca04.contains(myPlayer())) {
 			walking.webWalk(cp02);
-		} else if (ca035.contains(myPlayer()) && o05 != null) {
+		} else if (ca05.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
-		} else if (ca04.contains(myPlayer()) && o05 != null) {
+		} else if (ca06.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
-		} else if (ca05.contains(myPlayer()) && o11 != null) {
+		} else if (ca07.contains(myPlayer()) && o11 != null) {
 			o11.interact("Vault");
-		} else if (ca06.contains(myPlayer())) {
+		} else if (ca08.contains(myPlayer())) {
 			walking.webWalk(cp03);
-		} else if (ca07.contains(myPlayer()) && o05 != null) {
+		} else if (ca09.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
-		} else if (ca08.contains(myPlayer()) && o05 != null) {
+		} else if (ca10.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
 		}
 

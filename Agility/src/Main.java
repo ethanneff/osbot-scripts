@@ -107,8 +107,8 @@ public class Main extends Script {
 		Position cp03 = new Position(3502, 3476, 3); // walk
 		Area ca00 = new Area(3470, 3465, 3519, 3510); // canifis
 		Area ca01 = new Area(3503, 3490, 3511, 3498).setPlane(2);
-		Area ca02 = new Area(3499, 3501, 3504, 3509).setPlane(2); // move
-		Area ca03 = new Area(3495, 3500, 3498, 3509).setPlane(2);
+		Area ca02 = new Area(3499, 3502, 3504, 3508).setPlane(2); // move
+		Area ca03 = new Area(3495, 3502, 3498, 3507).setPlane(2);
 		Area ca04 = new Area(3489, 3496, 3493, 3511).setPlane(2); // move
 		Area ca05 = new Area(3484, 3496, 3488, 3506).setPlane(2);
 		Area ca06 = new Area(3473, 3489, 3480, 3500).setPlane(3);
@@ -228,11 +228,11 @@ public class Main extends Script {
 		} else if (ca01.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
 		} else if (ca02.contains(myPlayer())) {
-			walking.webWalk(cp01);
+			walking.walk(cp01);
 		} else if (ca03.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
 		} else if (ca04.contains(myPlayer())) {
-			walking.webWalk(cp02);
+			walking.walk(cp02);
 		} else if (ca05.contains(myPlayer()) && o05 != null) {
 			o05.interact("Jump");
 		} else if (ca06.contains(myPlayer()) && o05 != null) {

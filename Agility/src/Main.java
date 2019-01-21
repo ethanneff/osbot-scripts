@@ -90,9 +90,9 @@ public class Main extends Script {
 		Area va02 = new Area(3201, 3412, 3209, 3420).setPlane(3); // leap
 		Area va03 = new Area(3191, 3414, 3198, 3417).setPlane(1); // balance
 		Area va04 = new Area(3190, 3407, 3199, 3400).setPlane(3); // leap
-		Area va05 = new Area(3203, 3399, 3189, 3393).setPlane(3); // move vp01
+		Area va05 = new Area(3179, 3380, 3199, 3398).setPlane(3); // move vp01
 		Area va06 = new Area(3200, 3393, 3204, 3404).setPlane(3); // move vp01
-		Area va07 = new Area(3205, 3393, 3209, 3404).setPlane(3); // leap
+		Area va07 = new Area(3205, 3393, 3208, 3404).setPlane(3); // leap
 		Area va08 = new Area(3214, 3391, 3230, 3404).setPlane(3); // move vp02
 		Area va09 = new Area(3231, 3391, 3232, 3404).setPlane(3); // leap
 		Area va10 = new Area(3235, 3402, 3241, 3408).setPlane(3); // hurdle

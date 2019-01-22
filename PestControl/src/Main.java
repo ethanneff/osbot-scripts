@@ -1,336 +1,319 @@
+import java.awt.Graphics2D;
+
 import org.osbot.rs07.api.map.Position;
-
-import org.osbot.rs07.api.model.Entity;
-
 import org.osbot.rs07.api.model.NPC;
-
 import org.osbot.rs07.api.model.RS2Object;
-
 import org.osbot.rs07.api.ui.Message;
-
 import org.osbot.rs07.api.ui.Message.MessageType;
-
-import org.osbot.rs07.script.MethodProvider;
-
 import org.osbot.rs07.script.Script;
-
 import org.osbot.rs07.script.ScriptManifest;
-
-import java.awt.*;
-
-import java.util.Random;
 
 @ScriptManifest(
 
- author = "54b3ew5vw",
+		author = "54b3ew5vw",
 
- info = "PestControl test herp derp",
+		info = "PestControl test herp derp",
 
- name = "PestControl Afker B",
+		name = "PestControl Afker B",
 
- version = 0,
+		version = 0,
 
- logo = "")
+		logo = "")
 
 public class Main extends Script {
 
- // Npc names
+	// Npc names
 
- String[] pestControlMonsters = {
-  "Brawler",
-  "Defiler",
-  "Ravager",
-  "Shifter",
-  "Spinner",
-  "Torcher"
- };
+	String[] pestControlMonsters = { "Brawler", "Defiler", "Ravager", "Shifter", "Spinner", "Torcher" };
 
- boolean areWeInBoat, didWeArrive, didWeFinish = false;
+	boolean areWeInBoat, didWeArrive, didWeFinish = false;
 
- int okset = 0;
+	int okset = 0;
 
- String status = "Nothing";
+	String status = "Nothing";
 
- //int[] pestControlStarter = {1,2,3,4};
+	// int[] pestControlStarter = {1,2,3,4};
 
- //int[] pestControlMiddle = {10339,1630};
+	// int[] pestControlMiddle = {10339,1630};
 
- //int[] pestControlBoat1 = {2260,2643,2263,2638};
+	// int[] pestControlBoat1 = {2260,2643,2263,2638};
 
- //int[] pestControlBoat2 = {2637,2647,2641,2642};
+	// int[] pestControlBoat2 = {2637,2647,2641,2642};
 
- //int[] pestControlBoat3 = {2632,2654,2635,2649};
+	// int[] pestControlBoat3 = {2632,2654,2635,2649};
 
- @Override
+	@Override
 
- public void onStart() {
+	public void onStart() {
 
-  log("=============================");
+		log("=============================");
 
-  log("= Starting pest control bot =");
+		log("= Starting pest control bot =");
 
-  log("=============================");
+		log("=============================");
 
-  getBot().addMessageListener(this);
+		getBot().addMessageListener(this);
 
- }
+	}
 
- private enum State {
+	private enum State {
 
-  BOATING,
-  WAITING,
-  MOVING,
-  FINDINGTARGET,
-  KILLING,
-  CAMERAMOVE,
-  MICROWAIT;
+		BOATING, WAITING, MOVING, FINDINGTARGET, KILLING, CAMERAMOVE, MICROWAIT;
 
- };
+	};
 
- private State getState() {
+	private State getState() {
 
-  NPC findEnemy = npcs.closest(pestControlMonsters);
+		NPC findEnemy = npcs.closest(pestControlMonsters);
 
-  RS2Object findCauldron = objects.closest("Cauldron");
+		RS2Object findCauldron = objects.closest("Cauldron");
 
-  RS2Object findPlank = objects.closest("Gangplank");
+		RS2Object findPlank = objects.closest("Gangplank");
 
-  //RS2Object findPlank = objects.closest(9999).getX;
+		// RS2Object findPlank = objects.closest(9999).getX;
 
-  if (areWeInBoat == true && findCauldron != null && findPlank != null) {
+		if (areWeInBoat == true && findCauldron != null && findPlank != null) {
 
-   status = "Waiting";
+			status = "Waiting";
 
-   return State.WAITING;
+			return State.WAITING;
 
-  }
+		}
 
-  if (findCauldron == null && findPlank == null) {
+		if (findCauldron == null && findPlank == null) {
 
-   areWeInBoat = false;
+			areWeInBoat = false;
 
-   okset = objects.closest("Lander boat").getY() - myPlayer().getY();
+			okset = objects.closest("Lander boat").getY() - myPlayer().getY();
 
-   //log (objects.objects.closest("Lander boat").getY());
+			// log (objects.objects.closest("Lander boat").getY());
 
-   //log (myPlayer().getY());
+			// log (myPlayer().getY());
 
-   if (objects.closest("Lander boat").getY() - myPlayer().getY() < 10) {
+			if (objects.closest("Lander boat").getY() - myPlayer().getY() < 10) {
 
-    status = "Moving";
+				status = "Moving";
 
-    return State.MOVING;
+				return State.MOVING;
 
-   }
+			}
 
-  }
+		}
 
-  if (areWeInBoat == false && myPlayer().getY() < 3000 && findPlank != null) {
+		if (areWeInBoat == false && myPlayer().getY() < 3000 && findPlank != null) {
 
-   status = "Entering boat";
+			status = "Entering boat";
 
-   return State.BOATING;
+			return State.BOATING;
 
-  }
+		}
 
-  if (findEnemy != null && !myPlayer().isAnimating() && !myPlayer().isMoving() && !myPlayer().isUnderAttack() && myPlayer().getInteracting() == null) {
+		if (findEnemy != null && !myPlayer().isAnimating() && !myPlayer().isMoving() && !myPlayer().isUnderAttack()
+				&& myPlayer().getInteracting() == null) {
 
-   status = "Finding Target";
+			status = "Finding Target";
 
-   return State.FINDINGTARGET;
+			return State.FINDINGTARGET;
 
-  }
+		}
 
-  if (myPlayer().isAnimating() || myPlayer().isUnderAttack() || myPlayer().isMoving() || myPlayer().getInteracting() != null) {
+		if (myPlayer().isAnimating() || myPlayer().isUnderAttack() || myPlayer().isMoving()
+				|| myPlayer().getInteracting() != null) {
 
-   status = "Killing";
+			status = "Killing";
 
-   return State.KILLING;
+			return State.KILLING;
 
-  }
+		}
 
-  status = "MicroWaiting";
+		status = "MicroWaiting";
 
-  return State.MICROWAIT;
+		return State.MICROWAIT;
 
- }
+	}
 
- //@Override
+	// @Override
 
- //public int onLoop() throws InterruptedException {
+	// public int onLoop() throws InterruptedException {
 
- //	NPC findEnemy = npcs.closest(pestControlMonsters);
+	// NPC findEnemy = npcs.closest(pestControlMonsters);
 
- //	if (findEnemy != null){
+	// if (findEnemy != null){
 
- // if (!myPlayer().isAnimating() && !myPlayer().isMoving() && !myPlayer().isUnderAttack() && myPlayer().getInteracting() == null){
+	// if (!myPlayer().isAnimating() && !myPlayer().isMoving() &&
+	// !myPlayer().isUnderAttack() && myPlayer().getInteracting() == null){
 
- // findEnemy.interact("Attack");
+	// findEnemy.interact("Attack");
 
- // sleep(random(1000, 5000));
+	// sleep(random(1000, 5000));
 
- // }
+	// }
 
- //	}
+	// }
 
- // return random(100, 1000);
+	// return random(100, 1000);
 
- //}
+	// }
 
- public void onMessage(Message message) {
+	public void onMessage(Message message) {
 
-  if (message.getType() == MessageType.GAME) {
+		if (message.getType() == MessageType.GAME) {
 
-   try {
+			try {
 
-    if (message.getMessage().contains("You board the lander") || message.getMessage().contains("can't reach that!")) {
+				if (message.getMessage().contains("You board the lander")
+						|| message.getMessage().contains("can't reach that!")) {
 
-     areWeInBoat = true;
+					areWeInBoat = true;
 
-    } else {
+				} else {
 
-     // Do nothing
+					// Do nothing
 
-    }
+				}
 
-   } catch (Exception e) {
+			} catch (Exception e) {
 
-    e.printStackTrace();
+				e.printStackTrace();
 
-   }
+			}
 
-  }
+		}
 
- }
+	}
 
- @Override
+	@Override
 
- public int onLoop() throws InterruptedException {
+	public int onLoop() throws InterruptedException {
 
-  switch (getState()) {
+		switch (getState()) {
 
-   case WAITING:
+		case WAITING:
 
-    sleep(random(300, 750));
+			sleep(random(300, 750));
 
-    //log ("Waiting");
+			// log ("Waiting");
 
-    break;
+			break;
 
-   case MICROWAIT:
+		case MICROWAIT:
 
-    sleep(random(10, 100));
+			sleep(random(10, 100));
 
-    break;
+			break;
 
-   case BOATING:
+		case BOATING:
 
-    objects.closest("Gangplank").interact("Cross");
+			objects.closest("Gangplank").interact("Cross");
 
-    sleep(random(750, 1250));
+			sleep(random(750, 1250));
 
-    //log ("Entering boat");
+			// log ("Entering boat");
 
-    break;
+			break;
 
-   case MOVING:
+		case MOVING:
 
-    int newX = myPlayer().getX() + random(0, 18) - 9;
+			int newX = myPlayer().getX() + random(0, 18) - 9;
 
-    int newY = myPlayer().getY() - random(15, 25);
+			int newY = myPlayer().getY() - random(15, 25);
 
-    //Position baseObject = objects.closest(9999).getPosition();
+			// Position baseObject = objects.closest(9999).getPosition();
 
-    //Position towerLeft = new Position((baseObject.getX() - 14), (baseObject.getY() + 14), 0);
+			// Position towerLeft = new Position((baseObject.getX() - 14),
+			// (baseObject.getY() + 14), 0);
 
-    //Position towerRight = new Position((baseObject.getX() + 11), (baseObject.getY() + 14), 0);
+			// Position towerRight = new Position((baseObject.getX() + 11),
+			// (baseObject.getY() + 14), 0);
 
-    //Position towerTopLeft = new Position((baseObject.getX() - 11), (baseObject.getY() + 29), 0);
+			// Position towerTopLeft = new Position((baseObject.getX() - 11),
+			// (baseObject.getY() + 29), 0);
 
-    //Position towerTopRight = new Position((baseObject.getX() + 8), (baseObject.getY() + 29), 0);
+			// Position towerTopRight = new Position((baseObject.getX() + 8),
+			// (baseObject.getY() + 29), 0);
 
-    //Position[] newLocation = {new Position(newX, newY, 0)};
+			// Position[] newLocation = {new Position(newX, newY, 0)};
 
-    if (map.canReach(new Position(newX, newY, 0)) && myPlayer().isMoving() == false) {
+			if (map.canReach(new Position(newX, newY, 0)) && myPlayer().isMoving() == false) {
 
-     log("Location; " + newX + "," + newY + ",0");
+				log("Location; " + newX + "," + newY + ",0");
 
-     localWalker.map.walk(newX, newY);
+				walker.map.walk(newX, newY);
 
-     log("attempt click");
+				log("attempt click");
 
-     sleep(random(1000, 1750));
+				sleep(random(1000, 1750));
 
-    } else {
+			} else {
 
-     sleep(random(100, 1000));
+				sleep(random(100, 1000));
 
-    }
+			}
 
-    break;
+			break;
 
-   case FINDINGTARGET:
+		case FINDINGTARGET:
 
-    NPC findEnemy = npcs.closest(pestControlMonsters);
+			NPC findEnemy = npcs.closest(pestControlMonsters);
 
-    NPC findPortal = npcs.closest("Portal");
+			NPC findPortal = npcs.closest("Portal");
 
-    if (findPortal != null && findPortal.isAttackable()) {
+			if (findPortal != null && findPortal.isAttackable()) {
 
-     findEnemy.interact("Attack");
+				findEnemy.interact("Attack");
 
-     sleep(random(300, 2500));
+				sleep(random(300, 2500));
 
-     break;
+				break;
 
-    }
+			}
 
-    if (findEnemy != null && findEnemy.isAttackable()) {
+			if (findEnemy != null && findEnemy.isAttackable()) {
 
-     findEnemy.interact("Attack");
+				findEnemy.interact("Attack");
 
-     sleep(random(300, 2500));
+				sleep(random(300, 2500));
 
-    } else {
+			} else {
 
-     sleep(random(350, 1250));
+				sleep(random(350, 1250));
 
-    }
+			}
 
-    //log("Finding target");
+			// log("Finding target");
 
-    break;
+			break;
 
-   case KILLING:
+		case KILLING:
 
-    sleep(random(500, 3000));
+			sleep(random(500, 3000));
 
-    //log("Killing");
+			// log("Killing");
 
-    break;
+			break;
 
-  }
+		}
 
-  return random(200, 800);
+		return random(200, 800);
 
- }
+	}
 
- @Override
+	@Override
 
- public void onExit() {
+	public void onExit() {
 
-  log("YoloSwagAFk");
+		log("YoloSwagAFk");
 
- }
+	}
 
- @Override
+	@Override
 
- public void onPaint(Graphics2D g) {
+	public void onPaint(Graphics2D g) {
 
-  g.drawString("Status: " + status, 200, 328);
+		g.drawString("Status: " + status, 200, 328);
 
-  g.drawString("y difference " + okset, 200, 300);
+		g.drawString("y difference " + okset, 200, 300);
 
- }
+	}
 
 }

@@ -13,8 +13,8 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// properties
 	private Skill skill = Skill.FLETCHING;
-	private String logType = "Oak logs";
-	private String knifeType = "knife";
+	private String logType = "Willow logs";
+	private String knifeType = "Knife";
 	private long lastMovement;
 
 	@Override
@@ -71,8 +71,8 @@ public class Main extends Script {
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
 		// properties
-		Item knife = inventory.getItem(n -> n != null && n.getName().toLowerCase().contains(knifeType));
-		Item log = inventory.getItem(n -> n != null && n.getName().toLowerCase().contains(logType));
+		Item knife = inventory.getItem(n -> n != null && n.getName().contains(knifeType));
+		Item log = inventory.getItem(n -> n != null && n.getName().contains(logType));
 		long currentTime = System.nanoTime();
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		long seconds = (currentTime - lastMovement) / 1000000000;
@@ -100,9 +100,9 @@ public class Main extends Script {
 
 		// make
 		if (log != null && knife != null) {
-			selectMenu(knife, log, 17);
+			selectMenu(knife, log, 16);
 			if (!myPlayer().isAnimating()) {
-				selectMenu(knife, log, 16);
+				selectMenu(knife, log, 15);
 			}
 			return tick();
 		}
@@ -112,11 +112,11 @@ public class Main extends Script {
 		if (bank.getItem(logType).getAmount() <= 0) {
 			kill();
 		}
-		bank.depositAllExcept(n -> n != null && n.getName().toLowerCase().contains(knifeType));
+		bank.depositAllExcept(n -> n != null && n.getName().contains(knifeType));
 		if (!inventory.contains(knifeType)) {
 			bank.withdraw(knifeType, 1);
 		}
-		bank.withdraw(logType, random(55, 555));
+		bank.withdrawAll(logType);
 		bank.close();
 		interact();
 		return tick();

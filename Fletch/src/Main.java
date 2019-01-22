@@ -13,7 +13,7 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// properties
 	private Skill skill = Skill.FLETCHING;
-	private String logType = "Willow logs";
+	private String logType = "Maple logs";
 	private String knifeType = "Knife";
 	private long lastMovement;
 

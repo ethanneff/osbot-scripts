@@ -70,10 +70,6 @@ public class Main extends Script {
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
 
-//		Entity a = objects.closest(n -> n.getId() == 10821);
-//		a.interact("Jump");
-//		stop();
-
 		// obstacles
 		Entity o01 = objects.closest("Rough wall");
 		Entity o02 = objects.closest("Tightrope");

@@ -110,7 +110,7 @@ public class Main extends Script {
 		Area ca01 = new Area(3503, 3490, 3511, 3498).setPlane(2);
 		Area ca02 = new Area(3495, 3501, 3504, 3508).setPlane(2);
 		Area ca03 = new Area(3484, 3497, 3493, 3505).setPlane(2);
-		Area ca04 = new Area(3473, 3489, 3480, 3500).setPlane(3);
+		Area ca04 = new Area(3472, 3490, 3481, 3501).setPlane(3);
 		Area ca05 = new Area(3475, 3479, 3485, 3488).setPlane(2);
 		Area ca06 = new Area(3486, 3467, 3504, 3479).setPlane(3);
 		Area ca07 = new Area(3507, 3473, 3516, 3483).setPlane(2);

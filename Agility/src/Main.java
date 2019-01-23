@@ -176,7 +176,7 @@ public class Main extends Script {
 		}
 
 		// wait for action after movement
-		if (secondsSinceLastMovement < random(750, 1500) / 1000) {
+		if (secondsSinceLastMovement < random(1500, 2000) / 1000) {
 			return tick();
 		}
 

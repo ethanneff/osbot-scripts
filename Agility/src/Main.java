@@ -240,6 +240,7 @@ public class Main extends Script {
 		}
 
 		// action
+		camera.toTop();
 		interact();
 		return tick();
 	}

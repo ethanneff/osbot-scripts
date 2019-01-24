@@ -111,36 +111,6 @@ public class Main extends Script {
 		Area ca06 = new Area(3486, 3467, 3504, 3479).setPlane(3);
 		Area ca07 = new Area(3507, 3473, 3516, 3483).setPlane(2);
 
-//		// draynor
-//		Position d0 = new Position(3105, 3278, 0);
-//		Position d1 = new Position(3102, 3279, 3);
-//		Position d2 = new Position(3090, 3276, 3);
-//		Position d3 = new Position(3092, 3266, 3);
-//		Position d4 = new Position(3088, 3261, 3);
-//		Position d5 = new Position(3088, 3255, 3);
-//		Position d6 = new Position(3096, 3256, 3);
-//		Position d7 = new Position(3103, 3261, 0);
-//
-//		if (d1.distance(myPlayer()) < 50) {
-//			// draynor
-//			if (playerFell && o1 == null) {
-//				walking.webWalk(d0);
-//			} else if (playerFell && o1 != null) {
-//				o1.interact("Climb");
-//			} else if (nearPosition(current, d1) && o2 != null) {
-//				o2.interact("Cross");
-//			} else if (nearPosition(current, d2) && o2 != null) {
-//				o2.interact("Cross");
-//			} else if (nearPosition(current, d3) && o3 != null) {
-//				o3.interact("Balance");
-//			} else if (nearPosition(current, d4) && o4 != null) {
-//				o4.interact("Jump-up");
-//			} else if (nearPosition(current, d5) && o5 != null) {
-//				o5.interact("Jump");
-//			} else if (nearPosition(current, d6) && o6 != null) {
-//				o6.interact("Climb-down");
-//			}
-//		}
 		// seers
 		Position sp00 = new Position(2729, 3485, 0); // start
 		Area sa00 = new Area(2677, 3447, 2748, 3506); // seers

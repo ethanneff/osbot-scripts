@@ -141,6 +141,14 @@ public class Main extends Script {
 //				o6.interact("Climb-down");
 //			}
 //		}
+		// seers
+		Position sp00 = new Position(2729, 3485, 0); // start
+		Area sa00 = new Area(2677, 3447, 2748, 3506); // seers
+		Area sa01 = new Area(2719, 3488, 2731, 3498).setPlane(3);
+		Area sa02 = new Area(2702, 3485, 2714, 3500).setPlane(2);
+		Area sa03 = new Area(2705, 3474, 2717, 3484).setPlane(2);
+		Area sa04 = new Area(2697, 3468, 2717, 3477).setPlane(3);
+		Area sa05 = new Area(2688, 3458, 2704, 3466).setPlane(2);
 
 		// environment
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
@@ -233,6 +241,23 @@ public class Main extends Script {
 			objects.closest(n -> n.getId() == 10823).interact("Jump");
 		} else if (ca07.contains(myPlayer())) {
 			objects.closest(n -> n.getId() == 10832).interact("Jump");
+		}
+
+		// seers
+		else if (sa00.contains(myPlayer()) && sp00.distance(myPlayer()) > 10) {
+			walking.webWalk(sp00);
+		} else if (sa00.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 11373).interact("Climb-up");
+		} else if (sa01.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 11374).interact("Jump");
+		} else if (sa02.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 11378).interact("Cross");
+		} else if (sa03.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 11375).interact("Jump");
+		} else if (sa04.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 11376).interact("Jump");
+		} else if (sa05.contains(myPlayer())) {
+			objects.closest(n -> n.getId() == 11377).interact("Jump");
 		}
 
 		else {

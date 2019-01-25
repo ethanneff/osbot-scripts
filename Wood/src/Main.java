@@ -70,6 +70,7 @@ public class Main extends Script {
 		long currentTime = System.nanoTime();
 		long secondsSinceLastMovement = (currentTime - lastMovement) / 1000000000;
 		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) * 0.2;
+		long level = skills.getSkills().getDynamic(Skill.WOODCUTTING);
 
 		// early exit
 		if (mod != null || secondsSinceLastMovement > maxIdleTime || lowHp) {
@@ -82,20 +83,20 @@ public class Main extends Script {
 			return tick();
 		}
 
-		// action
+		// run
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			settings.setRunning(true);
-		} else if (inventory.isFull()) {
-			// drop
+		}
+		// drop
+		else if (inventory.isFull()) {
 			inventory.dropAll(n -> n != null && n.getName().toLowerCase().contains("log"));
-		} else if (skills.getSkills().getDynamic(Skill.WOODCUTTING) >= 15) {
-			// cut
+		}
+		// cut
+		else if (level >= 15 && level < 30) {
 			objects.closest(n -> n != null && n.getName().toLowerCase().contains("oak")).interact("Chop down");
-		} else if (skills.getSkills().getDynamic(Skill.WOODCUTTING) >= 30) {
-			// cut
+		} else if (level >= 30 && level < 45) {
 			objects.closest(n -> n != null && n.getName().toLowerCase().contains("willow")).interact("Chop down");
-		} else if (skills.getSkills().getDynamic(Skill.WOODCUTTING) >= 45) {
-			// cut
+		} else if (level >= 45 && level < 60) {
 			objects.closest(n -> n != null && n.getName().toLowerCase().contains("maple")).interact("Chop down");
 		}
 

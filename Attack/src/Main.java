@@ -31,12 +31,13 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// config
 	private Skill skill = Skill.STRENGTH;
-	private boolean enableCoin = true;
+	private boolean enableCoin = false;
 	private boolean enablePickup = true;
-	private boolean enableBones = true;
-	private boolean enableHerbs = false;
+	private boolean enableBigBones = false;
+	private boolean enableLowHerbs = false;
 	private boolean enableAlch = false;
 	private boolean enableAttack = true;
+	private boolean enableArrowPickup = false;
 	private NPC target;
 	private Item ammo;
 	private boolean isRanged;
@@ -109,8 +110,8 @@ public class Main extends Script {
 		GroundItem ground = getGroundItems().closest(
 				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
 						&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
-								|| (enableBones && n.getName().toLowerCase().contains("big bones"))
-								|| (enableHerbs && (n.getName().toLowerCase().contains("grimy")
+								|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
+								|| (enableLowHerbs && (n.getName().toLowerCase().contains("grimy")
 										|| !n.getName().toLowerCase().contains("guam")
 										|| !n.getName().toLowerCase().contains("marrentill")
 										|| !n.getName().toLowerCase().contains("tarromin")))
@@ -127,8 +128,8 @@ public class Main extends Script {
 								|| n.getName().toLowerCase().contains("key")
 								|| n.getName().toLowerCase().contains("rune")
 								|| n.getName().toLowerCase().contains("dragon")
-								|| n.getName().toLowerCase().contains("arrow") || n.getDefinition().isNoted()
-								|| n.hasAction("Eat", "Drink")));
+								|| (enableArrowPickup && n.getName().toLowerCase().contains("arrow"))
+								|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
@@ -192,7 +193,7 @@ public class Main extends Script {
 		}
 
 		// bury
-		if (enableBones && bone != null) {
+		if (enableBigBones && bone != null) {
 			bone.interact("Bury");
 			preventDoubleClick();
 			return nextLoop();

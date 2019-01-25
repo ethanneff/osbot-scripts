@@ -234,7 +234,8 @@ public class Main extends Script {
 		}
 
 		// player busy
-		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting()) {// myPlayer().isUnderAttack()) {
+		// TODO: better coordinate myPlayer().isUnderAttack() with target
+		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting() || myPlayer().isUnderAttack()) {
 			return nextLoop();
 		}
 

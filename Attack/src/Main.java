@@ -212,7 +212,7 @@ public class Main extends Script {
 		}
 
 		// enable special attack
-		if (combat.getSpecialPercentage() >= random(80, 100) && !combat.isSpecialActivated()) {
+		if (!isRanged && combat.getSpecialPercentage() >= random(80, 100) && !combat.isSpecialActivated()) {
 			combat.toggleSpecialAttack(true);
 		}
 

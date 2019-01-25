@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import org.osbot.rs07.api.model.GroundItem;
 import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.Skill;
 import org.osbot.rs07.api.ui.Tab;
@@ -71,6 +72,9 @@ public class Main extends Script {
 		long secondsSinceLastMovement = (currentTime - lastMovement) / 1000000000;
 		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) * 0.2;
 		long level = skills.getSkills().getDynamic(Skill.WOODCUTTING);
+		GroundItem ground = getGroundItems()
+				.closest(n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= 10 && map.canReach(n)
+						&& n.getName().toLowerCase().contains("nest"));
 
 		// early exit
 		if (mod != null || secondsSinceLastMovement > maxIdleTime || lowHp) {
@@ -83,8 +87,12 @@ public class Main extends Script {
 			return tick();
 		}
 
+		// pick up
+		if (ground != null) {
+			ground.interact("Take");
+		}
 		// run
-		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
+		else if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
 			settings.setRunning(true);
 		}
 		// drop

@@ -215,8 +215,10 @@ public class Main extends Script {
 
 		// seers
 		else if (sa00.contains(myPlayer()) && sp00.distance(myPlayer()) > 10) {
+			camera.moveYaw(0);
 			walking.webWalk(sp00);
 		} else if (sa00.contains(myPlayer())) {
+			camera.moveYaw(0);
 			objects.closest(n -> n.getId() == 11373).interact("Climb-up");
 		} else if (sa01.contains(myPlayer())) {
 			objects.closest(n -> n.getId() == 11374).interact("Jump");

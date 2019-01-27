@@ -216,8 +216,8 @@ public class Main extends Script {
 			combat.toggleSpecialAttack(true);
 		}
 
-		// attack npc
-		if (!enableAttack) {
+		// player busy
+		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting()) {
 			return nextLoop();
 		}
 

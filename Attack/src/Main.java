@@ -38,8 +38,6 @@ public class Main extends Script {
 	private boolean enableAlch = false;
 	private boolean enableAttack = true;
 	private boolean enableArrowPickup = false;
-	private NPC target;
-	private Item ammo;
 	private boolean isRanged;
 	private int distance = 7;
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
@@ -130,6 +128,13 @@ public class Main extends Script {
 								|| n.getName().toLowerCase().contains("dragon")
 								|| (enableArrowPickup && n.getName().toLowerCase().contains("arrow"))
 								|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
+		NPC potentialNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible()
+				&& n.getHealthPercent() > 0 && !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat")
+				&& map.canReach(n) && n.getPosition().distance(myPlayer().getPosition()) <= distance);
+		NPC attackingNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isUnderAttack()
+				&& !n.getName().toLowerCase().contains("rat") && map.canReach(n)
+				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && n.isInteracting(myPlayer()));
+		NPC nextTarget = potentialNpc != null ? potentialNpc : attackingNpc;
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
@@ -221,26 +226,13 @@ public class Main extends Script {
 			return nextLoop();
 		}
 
-		// reset
-		if (target != null && !target.isInteracting(myPlayer())) {
-			target = null;
-		}
+		// attack
+		nextTarget.interact("Attack");
 
-		// re-attack
-		if (target != null && !myPlayer().isInteracting(target) && target.isInteracting(myPlayer())) {
-			target.interact("Attack");
-			waitForNpcToRespond();
-			return nextLoop();
-		}
+		// prevent door clicks
+		camera.toTop();
 
-		// player busy
-		// TODO: better coordinate myPlayer().isUnderAttack() with target
-		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting() || myPlayer().isUnderAttack()) {
-			return nextLoop();
-		}
-
-		npc.interact("Attack");
-		target = npc;
+		// prevent spam clicks
 		waitForNpcToRespond();
 		return nextLoop();
 	}

@@ -35,6 +35,7 @@ public class Main extends Script {
 	private boolean enablePickup = true;
 	private boolean enableBigBones = false;
 	private boolean enableLowHerbs = false;
+	private boolean enableRunes = true;
 	private boolean enableAlch = false;
 	private boolean enableAttack = true;
 	private boolean enableArrowPickup = false;
@@ -102,32 +103,6 @@ public class Main extends Script {
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
-		NPC npc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible() && n.getHealthPercent() > 0
-				&& !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat") && map.canReach(n)
-				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
-		GroundItem ground = getGroundItems().closest(
-				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
-						&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
-								|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
-								|| (enableLowHerbs && (n.getName().toLowerCase().contains("grimy")
-										|| !n.getName().toLowerCase().contains("guam")
-										|| !n.getName().toLowerCase().contains("marrentill")
-										|| !n.getName().toLowerCase().contains("tarromin")))
-								|| n.getName().toLowerCase().contains("defender")
-								|| n.getName().toLowerCase().contains("token")
-								|| (enableAlch && (n.getName().toLowerCase().contains("black")
-										|| n.getName().toLowerCase().contains("mithril")
-										|| n.getName().toLowerCase().contains("adamant")))
-								|| n.getName().toLowerCase().contains("snapdragon")
-								|| n.getName().toLowerCase().contains("half")
-								|| n.getName().toLowerCase().contains("ranarr")
-								|| n.getName().toLowerCase().contains("torstol")
-								|| n.getName().toLowerCase().contains("snape grass")
-								|| n.getName().toLowerCase().contains("key")
-								|| n.getName().toLowerCase().contains("rune")
-								|| n.getName().toLowerCase().contains("dragon")
-								|| (enableArrowPickup && n.getName().toLowerCase().contains("arrow"))
-								|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
 		NPC potentialNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible()
 				&& n.getHealthPercent() > 0 && !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat")
 				&& map.canReach(n) && n.getPosition().distance(myPlayer().getPosition()) <= distance);
@@ -135,6 +110,29 @@ public class Main extends Script {
 				&& !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && n.isInteracting(myPlayer()));
 		NPC nextTarget = potentialNpc != null ? potentialNpc : attackingNpc;
+		GroundItem ground = getGroundItems().closest(n -> n != null
+				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
+				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
+						|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
+						|| (enableLowHerbs && n.getName().toLowerCase().contains("grimy")
+								&& !n.getName().toLowerCase().contains("guam"))
+						|| n.getName().toLowerCase().contains("defender") || n.getName().toLowerCase().contains("token")
+						|| (enableAlch && (n.getName().contains("Black") || n.getName().contains("Mithril")
+								|| n.getName().toLowerCase().contains("Rune") || n.getName().contains("Adamant")))
+						|| n.getName().toLowerCase().contains("snapdragon")
+						|| n.getName().toLowerCase().contains("half") || n.getName().toLowerCase().contains("ranarr")
+						|| n.getName().toLowerCase().contains("torstol")
+						|| n.getName().toLowerCase().contains("snape grass")
+						|| n.getName().toLowerCase().contains("key")
+						|| (enableRunes && (n.getName().toLowerCase().contains("nature")
+								|| n.getName().toLowerCase().contains("blood")
+								|| n.getName().toLowerCase().contains("death")
+								|| n.getName().toLowerCase().contains("law")))
+						|| n.getName().toLowerCase().contains("dragon")
+						|| (enableArrowPickup && n.getAmount() >= 3
+								&& (n.getName().toLowerCase().contains("arrow")
+										|| n.getName().toLowerCase().contains("dart")))
+						|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {

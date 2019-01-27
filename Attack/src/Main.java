@@ -37,12 +37,11 @@ public class Main extends Script {
 	private boolean enableLowHerbs = false;
 	private boolean enableRunes = true;
 	private boolean enableAlch = false;
-	private boolean enableAttack = true;
 	private boolean enableArrowPickup = false;
 	private boolean isRanged;
 	private int distance = 7;
+	private long lastAttack = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
-	private long lastAttack;
 
 	@Override
 	public void onStart() throws InterruptedException {
@@ -51,7 +50,6 @@ public class Main extends Script {
 		int mode = configs.get(43);
 		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
 		experienceTracker.start(skill);
-		lastAttack = System.nanoTime();
 		tabs.open(Tab.INVENTORY);
 		sleep(1000);
 	}
@@ -149,11 +147,23 @@ public class Main extends Script {
 		}
 
 		// stop if full
-//		if (inventory.isFull()) {
-//			stop();
-//			preventDoubleClick();
-//			return nextLoop();
-//		}
+		if (inventory.isFull()) {
+			stop();
+			preventDoubleClick();
+			return nextLoop();
+		}
+
+		// record last attack
+		long currentTime = System.nanoTime();
+		if (combat.getFighting().isHitBarVisible()) {
+			lastAttack = currentTime;
+		}
+
+		// stop if no attack
+		long seconds = (currentTime - lastAttack) / 1000000000;
+		if (seconds > 30) {
+			stop();
+		}
 
 		// warriors guild
 		if (inventory.contains("Black full helm") && inventory.contains("Black platebody")
@@ -165,18 +175,6 @@ public class Main extends Script {
 				return nextLoop();
 			}
 		}
-
-		// record last attack
-//		long currentTime = System.nanoTime();
-//		if (combat.getFighting().isHitBarVisible()) {
-//			lastAttack = currentTime;
-//		}
-
-//		// logout if no attack
-//		long seconds = (currentTime - lastAttack) / 1000000000;
-//		if (seconds > 30) {
-//			stop();
-//		}
 
 		// low hp logout
 		if (lowHp && food == null) {

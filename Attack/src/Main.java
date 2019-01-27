@@ -143,6 +143,7 @@ public class Main extends Script {
 			return nextLoop();
 		}
 
+		// stop if mod
 		if (mod != null) {
 			stop();
 			preventDoubleClick();

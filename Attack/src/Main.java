@@ -211,11 +211,6 @@ public class Main extends Script {
 			return nextLoop();
 		}
 
-		// find npc
-		if (npc != null && !npc.isVisible()) {
-			camera.toTop();
-		}
-
 		// enable special attack
 		if (!isRanged && combat.getSpecialPercentage() >= random(80, 100) && !combat.isSpecialActivated()) {
 			combat.toggleSpecialAttack(true);

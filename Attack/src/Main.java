@@ -55,7 +55,7 @@ public class Main extends Script {
 		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
 		experienceTracker.start(skill);
 		tabs.open(Tab.INVENTORY);
-		sleep(1000);
+		sleep(500);
 	}
 
 	@Override

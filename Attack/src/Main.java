@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
-import org.osbot.rs07.api.model.Entity;
 import org.osbot.rs07.api.model.GroundItem;
 import org.osbot.rs07.api.model.Item;
 import org.osbot.rs07.api.model.NPC;
@@ -42,6 +41,11 @@ public class Main extends Script {
 	private int distance = 7;
 	private long lastAttack = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
+	private NpcType currentNpcType = NpcType.FleshCrawler;
+
+	private enum NpcType {
+		FleshCrawler, Defender, ChaosDruids
+	}
 
 	@Override
 	public void onStart() throws InterruptedException {
@@ -108,29 +112,32 @@ public class Main extends Script {
 				&& !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && n.isInteracting(myPlayer()));
 		NPC nextTarget = potentialNpc != null ? potentialNpc : attackingNpc;
-		GroundItem ground = getGroundItems().closest(n -> n != null
-				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
-				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
-						|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
-						|| (enableLowHerbs && n.getName().toLowerCase().contains("grimy")
-								&& !n.getName().toLowerCase().contains("guam"))
-						|| n.getName().toLowerCase().contains("defender") || n.getName().toLowerCase().contains("token")
-						|| (enableAlch && (n.getName().contains("Black") || n.getName().contains("Mithril")
-								|| n.getName().toLowerCase().contains("Rune") || n.getName().contains("Adamant")))
-						|| n.getName().toLowerCase().contains("snapdragon")
-						|| n.getName().toLowerCase().contains("half") || n.getName().toLowerCase().contains("ranarr")
-						|| n.getName().toLowerCase().contains("torstol")
-						|| n.getName().toLowerCase().contains("snape grass")
-						|| n.getName().toLowerCase().contains("key")
-						|| (enableRunes && (n.getName().toLowerCase().contains("nature")
-								|| n.getName().toLowerCase().contains("blood")
-								|| n.getName().toLowerCase().contains("death")
-								|| n.getName().toLowerCase().contains("law")))
-						|| n.getName().toLowerCase().contains("dragon")
-						|| (enableArrowPickup && n.getAmount() >= 3
-								&& (n.getName().toLowerCase().contains("arrow")
-										|| n.getName().toLowerCase().contains("dart")))
-						|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
+		GroundItem ground = getGroundItems().closest(
+				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
+						&& (currentNpcType == NpcType.FleshCrawler && (n.getName().toLowerCase().contains("ranarr")
+								|| n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
+								|| n.getName().toLowerCase().contains("nature rune"))));
+//				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
+//						|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
+//						|| (enableLowHerbs && n.getName().toLowerCase().contains("grimy")
+//								&& !n.getName().toLowerCase().contains("guam"))
+//						|| n.getName().toLowerCase().contains("defender") || n.getName().toLowerCase().contains("token")
+//						|| (enableAlch && (n.getName().contains("Black") || n.getName().contains("Mithril")
+//								|| n.getName().contains("Rune") || n.getName().contains("Adamant")))
+//						|| n.getName().toLowerCase().contains("snapdragon")
+//						|| n.getName().toLowerCase().contains("half") || n.getName().toLowerCase().contains("ranarr")
+//						|| n.getName().toLowerCase().contains("torstol")
+//						|| n.getName().toLowerCase().contains("snape grass")
+//						|| n.getName().toLowerCase().contains("key")
+//						|| (enableRunes && (n.getName().toLowerCase().contains("nature")
+//								|| n.getName().toLowerCase().contains("blood")
+//								|| n.getName().toLowerCase().contains("death")
+//								|| n.getName().toLowerCase().contains("law")))
+//						|| n.getName().toLowerCase().contains("dragon")
+//						|| (enableArrowPickup && n.getAmount() >= 3
+//								&& (n.getName().toLowerCase().contains("arrow")
+//										|| n.getName().toLowerCase().contains("dart")))
+//						|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
 
 		// enable running
 		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
@@ -145,37 +152,37 @@ public class Main extends Script {
 			preventDoubleClick();
 			return nextLoop();
 		}
+//
+//		// stop if full
+//		if (inventory.isFull()) {
+//			stop();
+//			preventDoubleClick();
+//			return nextLoop();
+//		}
+//
+//		// record last attack
+//		long currentTime = System.nanoTime();
+//		if (combat.getFighting().isHitBarVisible()) {
+//			lastAttack = currentTime;
+//		}
+//
+//		// stop if no attack
+//		long seconds = (currentTime - lastAttack) / 1000000000;
+//		if (seconds > 30) {
+//			stop();
+//		}
 
-		// stop if full
-		if (inventory.isFull()) {
-			stop();
-			preventDoubleClick();
-			return nextLoop();
-		}
-
-		// record last attack
-		long currentTime = System.nanoTime();
-		if (combat.getFighting().isHitBarVisible()) {
-			lastAttack = currentTime;
-		}
-
-		// stop if no attack
-		long seconds = (currentTime - lastAttack) / 1000000000;
-		if (seconds > 30) {
-			stop();
-		}
-
-		// warriors guild
-		if (inventory.contains("Black full helm") && inventory.contains("Black platebody")
-				&& inventory.contains("Black platelegs")) {
-			Entity animator = objects.closest("Magical Animator");
-			if (animator != null) {
-				animator.interact("Animate");
-				preventDoubleClick();
-				return nextLoop();
-			}
-		}
-
+//		// warriors guild
+//		if (inventory.contains("Black full helm") && inventory.contains("Black platebody")
+//				&& inventory.contains("Black platelegs")) {
+//			Entity animator = objects.closest("Magical Animator");
+//			if (animator != null) {
+//				animator.interact("Animate");
+//				preventDoubleClick();
+//				return nextLoop();
+//			}
+//		}
+//
 		// low hp logout
 		if (lowHp && food == null) {
 			if (magic.canCast(teleport)) {

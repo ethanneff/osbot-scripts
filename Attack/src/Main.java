@@ -116,7 +116,8 @@ public class Main extends Script {
 				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
 						&& (currentNpcType == NpcType.FleshCrawler && (n.getName().toLowerCase().contains("ranarr")
 								|| n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
-								|| n.getName().toLowerCase().contains("nature rune"))));
+								|| n.getName().toLowerCase().contains("nature rune")
+								|| n.getName().toLowerCase().contains("fire rune"))));
 //				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
 //						|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
 //						|| (enableLowHerbs && n.getName().toLowerCase().contains("grimy")

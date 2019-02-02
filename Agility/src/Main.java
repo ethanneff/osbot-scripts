@@ -112,8 +112,8 @@ public class Main extends Script {
 		Area ca07 = new Area(3507, 3473, 3516, 3483).setPlane(2);
 
 		// seers
-		Position sp00 = new Position(2729, 3485, 0); // start
 		Area sa00 = new Area(2677, 3447, 2748, 3506); // seers
+		Position sp00 = new Position(2729, 3489, 0);
 		Area sa01 = new Area(2719, 3488, 2731, 3498).setPlane(3);
 		Area sa02 = new Area(2702, 3485, 2714, 3500).setPlane(2);
 		Area sa03 = new Area(2705, 3474, 2717, 3484).setPlane(2);

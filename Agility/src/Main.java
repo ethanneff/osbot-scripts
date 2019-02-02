@@ -18,7 +18,7 @@ public class Main extends Script {
 	// properties
 	private Skill skill = Skill.AGILITY;
 	private long lastMovement;
-	private long maxIdleTime = 20;
+	private long maxIdleTime = 30;
 
 	// timing
 	private int tick() {

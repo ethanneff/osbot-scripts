@@ -126,7 +126,7 @@ public class Main extends Script {
 				.closest(n -> n != null && map.canReach(n) && n.getName().toLowerCase().contains("mark of grace"));
 		long currentTime = System.nanoTime();
 		long secondsSinceLastMovement = (currentTime - lastMovement) / 1000000000;
-		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) * 0.2;
+		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) * 0.3;
 		Item inventoryFood = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 
 		// early exit

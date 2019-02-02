@@ -25,6 +25,8 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// config
 	private Skill skill = Skill.STRENGTH;
+	private long idleTime = 30;
+	private boolean isRanged = false;
 	private int distance = 7;
 	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
@@ -87,8 +89,7 @@ public class Main extends Script {
 	@Override
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
-		// state
-		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) / 2;
+		// environment
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
@@ -140,98 +141,80 @@ public class Main extends Script {
 										|| n.getName().toLowerCase().contains("law rune")
 										|| n.getName().toLowerCase().contains("air rune")
 										|| n.getName().toLowerCase().contains("nature rune"))));
+
+		// state
+		long currentTime = System.nanoTime();
+		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) / 2;
+		boolean modNearby = mod != null;
+		boolean playerBusy = myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting();
+		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler;
+		boolean hasNotAttackedInAwhile = ((currentTime - lastMovement) / 1000000000) > idleTime;
+		boolean aboutToDie = lowHp && food == null && !magic.canCast(teleport);
+		boolean shouldTeleport = lowHp && food == null && magic.canCast(teleport);
+		boolean shouldEat = lowHp && food != null;
+		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
+		boolean shouldBury = bone != null;
+		boolean shouldPickUp = ground != null && !inventory.isFull();
+		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(80, 100)
+				&& !combat.isSpecialActivated();
+		boolean shouldAttack = nextTarget != null && !playerBusy;
+
+		// already busy
+		if (playerBusy) {
+			lastMovement = currentTime;
 		}
 
-		// stop if mod
-		if (mod != null) {
+		// find next action
+		if (modNearby || inventoryIsFull || hasNotAttackedInAwhile || aboutToDie) {
+			// early exit
 			stop();
 			preventDoubleClick();
-			return nextLoop();
-		}
-//
-//		// stop if full
-//		if (inventory.isFull()) {
-//			stop();
-//			preventDoubleClick();
-//			return nextLoop();
-//		}
-//
-//		// record last attack
-//		long currentTime = System.nanoTime();
-//		if (combat.getFighting().isHitBarVisible()) {
-//			lastAttack = currentTime;
-//		}
-//
-//		// stop if no attack
-//		long seconds = (currentTime - lastAttack) / 1000000000;
-//		if (seconds > 30) {
-//			stop();
-//		}
-
-//		// warriors guild
-//		if (inventory.contains("Black full helm") && inventory.contains("Black platebody")
-//				&& inventory.contains("Black platelegs")) {
-//			Entity animator = objects.closest("Magical Animator");
-//			if (animator != null) {
-//				animator.interact("Animate");
-//				preventDoubleClick();
-//				return nextLoop();
-//			}
-//		}
-//
-		// low hp logout
-		if (lowHp && food == null) {
-			if (magic.canCast(teleport)) {
-				magic.castSpell(teleport);
-				preventDoubleClick();
-			}
-			stop();
+		} else if (shouldTeleport) {
+			// teleport
+			magic.castSpell(teleport);
 			preventDoubleClick();
-			return nextLoop();
-		}
-
-		// low hp eat
-		if (lowHp && food != null) {
+		} else if (shouldEat) {
+			// eat
 			food.interact("Eat", "Drink");
 			preventDoubleClick();
-			return nextLoop();
-		}
-
-		// bury
-		if (enableBigBones && bone != null) {
+		} else if (shouldRun) {
+			// run
+			settings.setRunning(true);
+			preventDoubleClick();
+		} else if (shouldBury) {
+			// bury
 			bone.interact("Bury");
 			preventDoubleClick();
-			return nextLoop();
-		}
-
-		// pick up
-		if (enablePickup && ground != null) {
+		} else if (shouldPickUp) {
+			// pick up
 			ground.interact("Take");
 			preventDoubleClick();
-			return nextLoop();
-		}
-
-		// enable special attack
-		if (!isRanged && combat.getSpecialPercentage() >= random(80, 100) && !combat.isSpecialActivated()) {
+		} else if (shouldSpecial) {
+			// enable special
 			combat.toggleSpecialAttack(true);
 			preventDoubleClick();
-			return nextLoop();
+		} else if (shouldAttack) {
+			// attack
+			nextTarget.interact("Attack");
+			camera.toTop();
+			waitForNpcToRespond();
 		}
 
-		// player busy
-		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting()) {
-			lastMovement = currentTime;
-			return nextLoop();
-		}
+		// // warriors guild
+		// if (inventory.contains("Black full helm") && inventory.contains("Black
+		// platebody")
+		// && inventory.contains("Black platelegs")) {
+		// Entity animator = objects.closest("Magical Animator");
+		// if (animator != null) {
+		// animator.interact("Animate");
+		// preventDoubleClick();
+		// return nextLoop();
+		// }
+		// }
 
-		// attack
-		nextTarget.interact("Attack");
+		// high alch
 
-		// prevent door clicks
-		camera.toTop();
-
-		// prevent spam clicks
-		waitForNpcToRespond();
+		// loop
 		return nextLoop();
 	}
 }

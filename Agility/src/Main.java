@@ -130,7 +130,7 @@ public class Main extends Script {
 		Item inventoryFood = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 
 		// early exit
-		if (mod != null || secondsSinceLastMovement > maxIdleTime || (lowHp && inventoryFood == null)) {
+		if (mod != null || (lowHp && inventoryFood == null) || secondsSinceLastMovement > maxIdleTime) {
 			kill();
 		}
 

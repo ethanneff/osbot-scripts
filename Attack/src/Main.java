@@ -219,6 +219,8 @@ public class Main extends Script {
 		// enable special attack
 		if (!isRanged && combat.getSpecialPercentage() >= random(80, 100) && !combat.isSpecialActivated()) {
 			combat.toggleSpecialAttack(true);
+			preventDoubleClick();
+			return nextLoop();
 		}
 
 		// player busy

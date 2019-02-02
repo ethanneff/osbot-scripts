@@ -44,7 +44,7 @@ public class Main extends Script {
 	private NpcType currentNpcType = NpcType.FleshCrawler;
 
 	private enum NpcType {
-		FleshCrawler, Defender, ChaosDruids
+		FleshCrawler, Cyclops, ChaosDruids
 	}
 
 	@Override
@@ -112,39 +112,47 @@ public class Main extends Script {
 				&& !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && n.isInteracting(myPlayer()));
 		NPC nextTarget = potentialNpc != null ? potentialNpc : attackingNpc;
-		GroundItem ground = getGroundItems().closest(
-				n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance && map.canReach(n)
-						&& (currentNpcType == NpcType.FleshCrawler && (n.getName().toLowerCase().contains("ranarr")
-								|| n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
-								|| n.getName().toLowerCase().contains("nature rune")
-								|| n.getName().toLowerCase().contains("fire rune"))));
-//				&& ((enableCoin && n.getName().toLowerCase().contains("coin"))
-//						|| (enableBigBones && n.getName().toLowerCase().contains("big bones"))
-//						|| (enableLowHerbs && n.getName().toLowerCase().contains("grimy")
-//								&& !n.getName().toLowerCase().contains("guam"))
-//						|| n.getName().toLowerCase().contains("defender") || n.getName().toLowerCase().contains("token")
-//						|| (enableAlch && (n.getName().contains("Black") || n.getName().contains("Mithril")
-//								|| n.getName().contains("Rune") || n.getName().contains("Adamant")))
-//						|| n.getName().toLowerCase().contains("snapdragon")
-//						|| n.getName().toLowerCase().contains("half") || n.getName().toLowerCase().contains("ranarr")
-//						|| n.getName().toLowerCase().contains("torstol")
-//						|| n.getName().toLowerCase().contains("snape grass")
-//						|| n.getName().toLowerCase().contains("key")
-//						|| (enableRunes && (n.getName().toLowerCase().contains("nature")
-//								|| n.getName().toLowerCase().contains("blood")
-//								|| n.getName().toLowerCase().contains("death")
-//								|| n.getName().toLowerCase().contains("law")))
-//						|| n.getName().toLowerCase().contains("dragon")
-//						|| (enableArrowPickup && n.getAmount() >= 3
-//								&& (n.getName().toLowerCase().contains("arrow")
-//										|| n.getName().toLowerCase().contains("dart")))
-//						|| n.getDefinition().isNoted() || n.hasAction("Eat", "Drink")));
-
-		// enable running
-		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
-			settings.setRunning(true);
-			preventDoubleClick();
-			return nextLoop();
+		GroundItem ground = getGroundItems()
+				.closest(n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance
+						&& map.canReach(n) && n.getName().toLowerCase().contains("shield left half")
+						|| n.getName().toLowerCase().contains("dragon spear")
+						|| n.getName().toLowerCase().contains("diamond")
+						|| n.getName().toLowerCase().contains("half of key")
+						|| (isRanged && n.getAmount() >= 3
+								&& (n.getName().toLowerCase().contains("arrow")
+										|| n.getName().toLowerCase().contains("dart")))
+						|| (currentNpcType == NpcType.FleshCrawler
+								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
+										|| n.getName().toLowerCase().contains("ranarr")
+										|| n.getName().toLowerCase().contains("nature rune")
+										|| n.getName().toLowerCase().contains("dust rune")
+										|| n.getName().toLowerCase().contains("fire rune")))
+						|| (currentNpcType == NpcType.Cyclops
+								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
+										|| n.hasAction("Eat", "Drink") || n.getName().toLowerCase().contains("rune")
+										|| n.getName().toLowerCase().contains("ranarr")
+										|| n.getName().toLowerCase().contains("adamant")
+										|| n.getName().toLowerCase().contains("mithril")
+										|| n.getName().toLowerCase().contains("defender")
+										|| n.getName().toLowerCase().contains("black knife")
+										|| n.getName().toLowerCase().contains("black longsword")
+										|| n.getName().toLowerCase().contains("long bone")
+										|| n.getName().toLowerCase().contains("curved bone")
+										|| n.getName().toLowerCase().contains("snapdragon")
+										|| n.getName().toLowerCase().contains("torstol")
+										|| n.getName().toLowerCase().contains("steel chainbody")
+										|| n.getName().toLowerCase().contains("2h")))
+						|| (currentNpcType == NpcType.ChaosDruids
+								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
+										|| n.getName().toLowerCase().contains("harralander")
+										|| n.getName().toLowerCase().contains("avantoe")
+										|| n.getName().toLowerCase().contains("irit leaf")
+										|| n.getName().toLowerCase().contains("lantadyme")
+										|| n.getName().toLowerCase().contains("cadantine")
+										|| n.getName().toLowerCase().contains("dwarf weed")
+										|| n.getName().toLowerCase().contains("law rune")
+										|| n.getName().toLowerCase().contains("air rune")
+										|| n.getName().toLowerCase().contains("nature rune"))));
 		}
 
 		// stop if mod

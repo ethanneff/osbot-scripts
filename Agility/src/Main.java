@@ -101,8 +101,8 @@ public class Main extends Script {
 		Area va11 = new Area(3235, 3410, 3241, 3416).setPlane(3); // jump off
 
 		// canifis
-		Position cp00 = new Position(3505, 3488, 0); // start
-		Area ca00 = new Area(3470, 3465, 3519, 3510); // canifis
+		Position cp00 = new Position(3505, 3488, 0);
+		Area ca00 = new Area(3470, 3465, 3519, 3510);
 		Area ca01 = new Area(3503, 3490, 3511, 3498).setPlane(2);
 		Area ca02 = new Area(3495, 3501, 3504, 3508).setPlane(2);
 		Area ca03 = new Area(3484, 3497, 3493, 3505).setPlane(2);

@@ -39,7 +39,7 @@ public class Main extends Script {
 	private boolean enableArrowPickup = false;
 	private boolean isRanged;
 	private int distance = 7;
-	private long lastAttack = System.nanoTime();
+	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
 	private NpcType currentNpcType = NpcType.FleshCrawler;
 
@@ -225,6 +225,7 @@ public class Main extends Script {
 
 		// player busy
 		if (myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting()) {
+			lastMovement = currentTime;
 			return nextLoop();
 		}
 

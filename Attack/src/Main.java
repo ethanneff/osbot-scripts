@@ -30,14 +30,6 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// config
 	private Skill skill = Skill.STRENGTH;
-	private boolean enableCoin = false;
-	private boolean enablePickup = true;
-	private boolean enableBigBones = false;
-	private boolean enableLowHerbs = false;
-	private boolean enableRunes = true;
-	private boolean enableAlch = false;
-	private boolean enableArrowPickup = false;
-	private boolean isRanged;
 	private int distance = 7;
 	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;

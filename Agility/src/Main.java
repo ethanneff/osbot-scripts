@@ -134,19 +134,6 @@ public class Main extends Script {
 			kill();
 		}
 
-		// eat food
-		if (lowHp) {
-			inventoryFood.interact("Eat", "Drink");
-			interact();
-			return tick();
-		}
-
-		// enable running
-		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
-			settings.setRunning(true);
-			interact();
-		}
-
 		// moving
 		if (myPlayer().isMoving() || myPlayer().isAnimating()) {
 			lastMovement = currentTime;
@@ -158,15 +145,23 @@ public class Main extends Script {
 			return tick();
 		}
 
+		// eat
+		if (lowHp) {
+			inventoryFood.interact("Eat", "Drink");
+		}
+
+		// run
+		else if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
+			settings.setRunning(true);
+		}
+
 		// pick up
-		if (ground != null) {
+		else if (ground != null) {
 			ground.interact("Take");
-			interact();
-			return tick();
 		}
 
 		// varrock
-		if (va00.contains(myPlayer()) && vp00.distance(myPlayer()) > 10) {
+		else if (va00.contains(myPlayer()) && vp00.distance(myPlayer()) > 10) {
 			walking.webWalk(vp00);
 		} else if (va00.contains(myPlayer()) && o01 != null) {
 			o01.interact("Climb");

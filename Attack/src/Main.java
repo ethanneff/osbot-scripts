@@ -104,7 +104,13 @@ public class Main extends Script {
 				.closest(n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance
 						&& map.canReach(n) && n.getName().toLowerCase().contains("shield left half")
 						|| n.getName().toLowerCase().contains("dragon spear")
+						|| n.getName().toLowerCase().contains("dragon med helm")
+						|| n.getName().toLowerCase().contains("rune 2h sword")
+						|| n.getName().toLowerCase().contains("rune sq shield")
+						|| n.getName().toLowerCase().contains("rune kitesheld")
 						|| n.getName().toLowerCase().contains("diamond")
+						|| n.getName().toLowerCase().contains("dragonstone")
+						|| n.getName().toLowerCase().contains("runite bar")
 						|| n.getName().toLowerCase().contains("half of key")
 						|| (isRanged && n.getAmount() >= 3
 								&& (n.getName().toLowerCase().contains("arrow")

@@ -4,6 +4,7 @@
 // TODO: capture change in attack
 // TODO: add world hop
 // TODO: fix logout does not work if in combat
+// TODO: turn off auto retaliate and add logic to attack target 
 
 import java.awt.Color;
 import java.awt.Font;

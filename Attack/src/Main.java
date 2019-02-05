@@ -151,12 +151,8 @@ public class Main extends Script {
 		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(80, 100)
 				&& !combat.isSpecialActivated();
 		boolean shouldAttack = nextTarget != null && !playerBusy;
-		boolean shouldWorldHop = players.getAll().size() >= 2 && !combat.isFighting();
-
-		// already busy
-		if (playerBusy) {
-			lastMovement = currentTime;
-		}
+		boolean shouldWorldHop = players.getAll().size() >= 2 && !playerBusy;
+		lastMovement = playerBusy ? currentTime : lastMovement;
 
 		// find next action
 		if (modNearby || inventoryIsFull || hasNotAttackedInAwhile || aboutToDie) {

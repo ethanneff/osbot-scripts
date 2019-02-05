@@ -1,7 +1,6 @@
 
 // TODO: re-attack old target
 // TODO: capture change in attack
-// TODO: add world hop
 // TODO: fix logout does not work if in combat
 // TODO: turn off auto retaliate and add logic to attack target 
 
@@ -72,18 +71,6 @@ public class Main extends Script {
 				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
 				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 60);
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
-	}
-
-	public int nextLoop() {
-		return random(100, 300);
-	}
-
-	public void preventDoubleClick() throws InterruptedException {
-		sleep(random(1000, 1200));
-	}
-
-	public void waitForNpcToRespond() throws InterruptedException {
-		sleep(random(1750, 2250));
 	}
 
 	@Override
@@ -181,32 +168,25 @@ public class Main extends Script {
 		} else if (shouldTeleport) {
 			// teleport
 			magic.castSpell(teleport);
-			preventDoubleClick();
 		} else if (shouldEat) {
 			// eat
 			food.interact("Eat", "Drink");
-			preventDoubleClick();
 		} else if (shouldRun) {
 			// run
 			settings.setRunning(true);
-			preventDoubleClick();
 		} else if (shouldBury) {
 			// bury
 			bone.interact("Bury");
-			preventDoubleClick();
 		} else if (shouldPickUp) {
 			// pick up
 			ground.interact("Take");
-			preventDoubleClick();
 		} else if (shouldSpecial) {
 			// enable special
 			combat.toggleSpecialAttack(true);
-			preventDoubleClick();
 		} else if (shouldAttack) {
 			// attack
 			nextTarget.interact("Attack");
 			camera.toTop();
-			waitForNpcToRespond();
 		}
 
 		// // warriors guild
@@ -224,6 +204,6 @@ public class Main extends Script {
 		// high alch
 
 		// loop
-		return nextLoop();
+		return random(800, 1200);
 	}
 }

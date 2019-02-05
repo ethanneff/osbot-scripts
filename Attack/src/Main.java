@@ -150,7 +150,7 @@ public class Main extends Script {
 		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(80, 100)
 				&& !combat.isSpecialActivated();
 		boolean shouldAttack = nextTarget != null && !playerBusy;
-		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p)).size() > 2
+		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p)).size() >= 2
 				&& !playerBusy;
 
 		lastMovement = playerBusy ? currentTime : lastMovement;

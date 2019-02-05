@@ -1,5 +1,4 @@
 
-// TODO: still click on doors
 // TODO: re-attack old target
 // TODO: capture change in attack
 // TODO: add world hop

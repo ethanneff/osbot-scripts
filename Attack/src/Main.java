@@ -106,7 +106,6 @@ public class Main extends Script {
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
 										|| n.getName().toLowerCase().contains("ranarr")
 										|| n.getName().toLowerCase().contains("nature rune")
-										|| n.getName().toLowerCase().contains("dust rune")
 										|| n.getName().toLowerCase().contains("fire rune")))
 						|| (currentNpcType == NpcType.Cyclops
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")

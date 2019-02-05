@@ -27,6 +27,7 @@ public class Main extends Script {
 	private long idleTime = 60;
 	private boolean isRanged = false;
 	private int distance = 7;
+	private long minPeople = 3;
 	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
 	private NpcType currentNpcType = NpcType.FleshCrawler;
@@ -139,8 +140,9 @@ public class Main extends Script {
 		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) / 2;
 		boolean modNearby = mod != null;
 		boolean playerBusy = myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting();
+		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
 		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler;
-		boolean hasNotAttackedInAwhile = ((currentTime - lastMovement) / 1000000000) > idleTime;
+		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
 		boolean aboutToDie = lowHp && food == null && !magic.canCast(teleport);
 		boolean shouldTeleport = lowHp && food == null && magic.canCast(teleport);
 		boolean shouldEat = lowHp && food != null;
@@ -150,13 +152,13 @@ public class Main extends Script {
 		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(80, 100)
 				&& !combat.isSpecialActivated();
 		boolean shouldAttack = nextTarget != null && !playerBusy;
-		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p)).size() >= 2
-				&& !playerBusy;
+		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p))
+				.size() >= minPeople && !playerBusy && playerOutOfCombat;
 
 		lastMovement = playerBusy ? currentTime : lastMovement;
 
 		// find next action
-		if (modNearby || inventoryIsFull || hasNotAttackedInAwhile || aboutToDie) {
+		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || aboutToDie) {
 			// early exit
 			stop();
 		} else if (shouldWorldHop) {

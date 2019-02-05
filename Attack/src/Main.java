@@ -164,6 +164,7 @@ public class Main extends Script {
 		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(80, 100)
 				&& !combat.isSpecialActivated();
 		boolean shouldAttack = nextTarget != null && !playerBusy;
+		boolean shouldWorldHop = players.getAll().size() >= 2 && !combat.isFighting();
 
 		// already busy
 		if (playerBusy) {
@@ -174,7 +175,9 @@ public class Main extends Script {
 		if (modNearby || inventoryIsFull || hasNotAttackedInAwhile || aboutToDie) {
 			// early exit
 			stop();
-			preventDoubleClick();
+		} else if (shouldWorldHop) {
+			// world hop
+			worlds.hopToP2PWorld();
 		} else if (shouldTeleport) {
 			// teleport
 			magic.castSpell(teleport);

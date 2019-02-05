@@ -25,7 +25,7 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// config
 	private Skill skill = Skill.STRENGTH;
-	private long idleTime = 30;
+	private long idleTime = 60;
 	private boolean isRanged = false;
 	private int distance = 7;
 	private long lastMovement = System.nanoTime();

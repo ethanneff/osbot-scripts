@@ -154,7 +154,6 @@ public class Main extends Script {
 		boolean shouldAttack = nextTarget != null && !playerBusy;
 		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p))
 				.size() >= minPeople && !playerBusy && playerOutOfCombat;
-
 		lastMovement = playerBusy ? currentTime : lastMovement;
 
 		// find next action

@@ -71,6 +71,8 @@ public class Main extends Script {
 		g.drawString("Gained -> " + String.valueOf(experienceTracker.getGainedLevels(skill)) + " "
 				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
 				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 65);
+		g.drawString("Inventory -> " + String.valueOf(inventory.getEmptySlotCount()) + "/"
+				+ String.valueOf(inventory.getCapacity()), 2, 80);
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
 	}
 

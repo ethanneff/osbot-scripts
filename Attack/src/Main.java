@@ -64,13 +64,13 @@ public class Main extends Script {
 	public void onPaint(Graphics2D g) {
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 30);
+		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 35);
 		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill)) + " ("
 				+ String.valueOf(combat.getCombatLevel()) + ") "
-				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 45);
+				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 50);
 		g.drawString("Gained -> " + String.valueOf(experienceTracker.getGainedLevels(skill)) + " "
 				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
-				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 60);
+				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 65);
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
 	}
 

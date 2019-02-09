@@ -8,12 +8,16 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import org.osbot.rs07.api.map.Area;
+import org.osbot.rs07.api.map.Position;
+import org.osbot.rs07.api.model.Entity;
 import org.osbot.rs07.api.model.GroundItem;
 import org.osbot.rs07.api.model.Item;
 import org.osbot.rs07.api.model.NPC;
 import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.EquipmentSlot;
 import org.osbot.rs07.api.ui.MagicSpell;
+import org.osbot.rs07.api.ui.PrayerButton;
 import org.osbot.rs07.api.ui.Skill;
 import org.osbot.rs07.api.ui.Spells;
 import org.osbot.rs07.api.ui.Tab;
@@ -31,7 +35,9 @@ public class Main extends Script {
 	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
 	private NpcType currentNpcType = NpcType.FleshCrawler;
+	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
+	private long pestZoneX = 7000;
 
 	private enum NpcType {
 		FleshCrawler, Cyclops, ChaosDruids
@@ -81,9 +87,12 @@ public class Main extends Script {
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
 		// environment
+		Position playerPosition = myPlayer().getPosition();
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
+		Player nearbyMovingPlayer = players
+				.closest(p -> p != null && p.isMoving() && p.getPosition().distance(myPlayer()) > distance);
 		NPC potentialNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible()
 				&& n.getHealthPercent() > 0 && !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat")
 				&& map.canReach(n) && n.getPosition().distance(myPlayer().getPosition()) <= distance);
@@ -137,8 +146,28 @@ public class Main extends Script {
 										|| n.getName().toLowerCase().contains("air rune")
 										|| n.getName().toLowerCase().contains("nature rune"))));
 
+		// pest control
+		Entity pestGangplank = objects.closest(n -> n.getId() == 25631);
+		Area pestBeforeEntry = new Area(2643, 2647, 2646, 2640);
+		Area pestWaitingInBoat = new Area(2637, 2640, 2641, 2648);
+		NPC pest = npcs.closest(n -> n != null && n.isAttackable() && n.getHealthPercent() > 0
+				&& (n.getName().toLowerCase().contains("defiler") || n.getName().toLowerCase().contains("defiler")
+						|| n.getName().toLowerCase().contains("brawler")
+						|| n.getName().toLowerCase().contains("defiler")
+						|| n.getName().toLowerCase().contains("ravager")
+						|| n.getName().toLowerCase().contains("shifter")
+						|| n.getName().toLowerCase().contains("spinner")
+						|| n.getName().toLowerCase().contains("splatter")
+						|| n.getName().toLowerCase().contains("torcher"))
+				&& map.canReach(n));
+
 		// state
+		long currentWorld = worlds.getCurrentWorld();
 		long currentTime = System.nanoTime();
+		boolean playerBeforePestEntry = pestBeforeEntry.contains(myPlayer()) && pestGangplank != null;
+		boolean playerWaitingInPestBoat = pestWaitingInBoat.contains(myPlayer());
+		boolean playerInPestControl = playerPosition.getX() > pestZoneX || playerBeforePestEntry
+				|| playerWaitingInPestBoat;
 		boolean lowHp = skills.getDynamic(Skill.HITPOINTS) <= skills.getStatic(Skill.HITPOINTS) / 2;
 		boolean modNearby = mod != null;
 		boolean playerBusy = myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting();
@@ -156,7 +185,42 @@ public class Main extends Script {
 		boolean shouldAttack = nextTarget != null && !playerBusy;
 		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p))
 				.size() >= minPeople && !playerBusy && playerOutOfCombat;
+		boolean shouldPestPrayer = !prayer.isActivated(prayerSkill);
+		boolean shouldHopToPestControl = currentWorld != 344 && (playerBeforePestEntry || playerWaitingInPestBoat);
+
+		// update
 		lastMovement = playerBusy ? currentTime : lastMovement;
+		hudBase = playerInPestControl ? 150 : hudBase;
+
+		// pest control
+		if (playerInPestControl) {
+			if (playerBusy) {
+				log("player busy");
+			} else if (shouldHopToPestControl) {
+				log("hop to pest control");
+				worlds.hop(344);
+			} else if (playerBeforePestEntry) {
+				log("enter boat");
+				camera.toTop();
+				pestGangplank.interact("Cross");
+			} else if (playerWaitingInPestBoat) {
+				log("waitingInBoat");
+			} else if (pest != null) {
+				log("attack pest");
+				pest.interact("Attack");
+				camera.toTop();
+			} else if (shouldRun) {
+				log("enable run");
+				settings.setRunning(true);
+			} else if (shouldPestPrayer) {
+				log("enable prayer");
+				prayer.set(prayerSkill, true);
+			} else if (nearbyMovingPlayer != null) {
+				log("follow player");
+				nearbyMovingPlayer.interact("Follow");
+			}
+			return random(800, 1200);
+		}
 
 		// attack
 		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || aboutToDie) {

@@ -64,15 +64,15 @@ public class Main extends Script {
 	public void onPaint(Graphics2D g) {
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 35);
+		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, hudBase);
 		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill)) + " ("
 				+ String.valueOf(combat.getCombatLevel()) + ") "
-				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 50);
+				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, hudBase + 15);
 		g.drawString("Gained -> " + String.valueOf(experienceTracker.getGainedLevels(skill)) + " "
 				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
-				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 65);
+				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, hudBase + 30);
 		g.drawString("Inventory -> " + String.valueOf(inventory.getEmptySlotCount()) + "/"
-				+ String.valueOf(inventory.getCapacity()), 2, 80);
+				+ String.valueOf(inventory.getCapacity()), 2, hudBase + 45);
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
 	}
 
@@ -157,7 +157,7 @@ public class Main extends Script {
 				.size() >= minPeople && !playerBusy && playerOutOfCombat;
 		lastMovement = playerBusy ? currentTime : lastMovement;
 
-		// find next action
+		// attack
 		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || aboutToDie) {
 			log("early exit");
 			stop();
@@ -165,7 +165,7 @@ public class Main extends Script {
 			log("world hop");
 			worlds.hopToP2PWorld();
 		} else if (shouldTeleport) {
-			// teleport
+			log("teleport");
 			magic.castSpell(teleport);
 		} else if (shouldEat) {
 			log("eat");

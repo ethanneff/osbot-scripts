@@ -31,6 +31,7 @@ public class Main extends Script {
 	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
 	private NpcType currentNpcType = NpcType.FleshCrawler;
+	private long hudBase = 35;
 
 	private enum NpcType {
 		FleshCrawler, Cyclops, ChaosDruids
@@ -144,8 +145,8 @@ public class Main extends Script {
 		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
 		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler;
 		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
-		boolean aboutToDie = lowHp && food == null && !magic.canCast(teleport);
-		boolean shouldTeleport = lowHp && food == null && magic.canCast(teleport);
+		boolean aboutToDie = lowHp && food == null && !playerInPestControl && !magic.canCast(teleport);
+		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && magic.canCast(teleport);
 		boolean shouldEat = lowHp && food != null;
 		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
 		boolean shouldBury = bone != null;

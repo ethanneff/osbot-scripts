@@ -159,31 +159,31 @@ public class Main extends Script {
 
 		// find next action
 		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || aboutToDie) {
-			// early exit
+			log("early exit");
 			stop();
 		} else if (shouldWorldHop) {
-			// world hop
+			log("world hop");
 			worlds.hopToP2PWorld();
 		} else if (shouldTeleport) {
 			// teleport
 			magic.castSpell(teleport);
 		} else if (shouldEat) {
-			// eat
+			log("eat");
 			food.interact("Eat", "Drink");
 		} else if (shouldRun) {
-			// run
+			log("run");
 			settings.setRunning(true);
 		} else if (shouldBury) {
-			// bury
+			log("bury");
 			bone.interact("Bury");
 		} else if (shouldPickUp) {
-			// pick up
+			log("pick up");
 			ground.interact("Take");
 		} else if (shouldSpecial) {
-			// enable special
+			log("enable special");
 			combat.toggleSpecialAttack(true);
 		} else if (shouldAttack) {
-			// attack
+			log("attack");
 			nextTarget.interact("Attack");
 			camera.toTop();
 		}

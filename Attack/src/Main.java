@@ -188,18 +188,6 @@ public class Main extends Script {
 			camera.toTop();
 		}
 
-		// // warriors guild
-		// if (inventory.contains("Black full helm") && inventory.contains("Black
-		// platebody")
-		// && inventory.contains("Black platelegs")) {
-		// Entity animator = objects.closest("Magical Animator");
-		// if (animator != null) {
-		// animator.interact("Animate");
-		// preventDoubleClick();
-		// return nextLoop();
-		// }
-		// }
-
 		// high alch
 
 		// loop

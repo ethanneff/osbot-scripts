@@ -20,7 +20,7 @@ import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
 import org.osbot.rs07.script.ScriptManifest;
 
-@ScriptManifest(author = "Me", info = "Curse cows", name = "Attack", version = 0, logo = "")
+@ScriptManifest(author = "Me", info = "kill things", name = "Attack", version = 0, logo = "")
 public class Main extends Script {
 	// config
 	private Skill skill = Skill.STRENGTH;

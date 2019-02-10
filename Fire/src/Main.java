@@ -72,8 +72,9 @@ public class Main extends Script {
 		} else if (item == null) {
 			bank.open();
 			bank.depositAllExcept(n -> n != null && n.getName().contains(toolType));
-			if (bank.getItem(itemType).getAmount() <= 0) {
-				bank.close();
+			Item itemBank = bank.getItem(itemType);
+			Item toolBank = bank.getItem(toolType);
+			if (itemBank == null || (!inventory.contains(toolType) && toolBank == null)) {
 				kill();
 			}
 			if (!inventory.contains(toolType)) {

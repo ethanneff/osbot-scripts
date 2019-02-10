@@ -37,7 +37,7 @@ public class Main extends Script {
 	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
 	private long pestZoneX = 6700;
-	private NpcType currentNpcType = NpcType.ChaosDruids;
+	private NpcType currentNpcType = NpcType.FleshCrawler;
 
 	private enum NpcType {
 		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon
@@ -110,14 +110,13 @@ public class Main extends Script {
 						|| n.getName().toLowerCase().contains("rune 2h sword")
 						|| n.getName().toLowerCase().contains("rune sq shield")
 						|| n.getName().toLowerCase().contains("rune kitesheld")
-						|| n.getName().toLowerCase().contains("diamond")
+//						|| n.getName().toLowerCase().contains("diamond")
 						|| n.getName().toLowerCase().contains("looting bag")
 						|| n.getName().toLowerCase().contains("dragonstone")
 						|| n.getName().toLowerCase().contains("runite bar")
 						|| n.getName().toLowerCase().contains("emblem")
 						|| n.getName().toLowerCase().contains("half of key")
-						|| (isRanged
-								&& n.getAmount() >= 3
+						|| (isRanged && n.getAmount() >= 3
 								&& (n.getName().toLowerCase().contains("arrow")
 										|| n.getName().toLowerCase().contains("dart")))
 						|| (currentNpcType == NpcType.FleshCrawler
@@ -199,7 +198,7 @@ public class Main extends Script {
 		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
 		boolean shouldBury = bone != null;
 		boolean shouldPickUp = ground != null && !inventory.isFull();
-		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(80, 100)
+		boolean shouldSpecial = !isRanged && combat.getSpecialPercentage() >= random(50, 100)
 				&& !combat.isSpecialActivated();
 		boolean shouldAttack = nextTarget != null && !playerBusy;
 		boolean shouldWorldHop = players.filter(p -> p != null && myPlayer().getArea(distance).contains(p))

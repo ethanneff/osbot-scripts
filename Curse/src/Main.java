@@ -3,35 +3,31 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import org.osbot.rs07.api.model.NPC;
+import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.MagicSpell;
 import org.osbot.rs07.api.ui.Skill;
 import org.osbot.rs07.api.ui.Spells;
+import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
 import org.osbot.rs07.script.ScriptManifest;
 
-@ScriptManifest(author = "Me", info = "Curse cows", name = "Curse", version = 0, logo = "")
+@ScriptManifest(author = "Me", name = "Curse", version = 0, logo = "", info = "")
 public class Main extends Script {
-	// config
-	String inventory = "Body rune";
-	Skill skill = Skill.MAGIC;
-	long startAmount = 0;
-	long experiencePerSpell = 29;
-	String npcName = "Cow";
-	String nonNpcName = "Dairy";
-	MagicSpell spell = Spells.NormalSpells.CURSE;
+	// properties
+	private Skill skill = Skill.MAGIC;
+	private MagicSpell spell = Spells.NormalSpells.CURSE;
+	private long lastMovement;
+	private int maxIdle = 60;
 
 	@Override
-	public void onStart() {
-		startAmount = getInventory().getAmount(inventory);
+	public void onStart() throws InterruptedException {
+		lastMovement = System.nanoTime();
 		experienceTracker.start(skill);
+		tabs.open(Tab.INVENTORY);
+		sleep(500);
 	}
 
-	@Override
-	public void onExit() {
-		log("Stopped");
-	}
-
-	public final String formatTime(final long ms) {
+	private final String formatTime(final long ms) {
 		long s = ms / 1000, m = s / 60, h = m / 60;
 		s %= 60;
 		m %= 60;
@@ -41,74 +37,44 @@ public class Main extends Script {
 
 	@Override
 	public void onPaint(Graphics2D g) {
-		long currentAmount = getInventory().getAmount(inventory);
 		g.setColor(new Color(255, 255, 255));
 		g.setFont(new Font("Open Sans", Font.PLAIN, 12));
-		g.drawString("Curse everything", 2, 230);
-		g.drawString("Elapsed time:         \t" + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2,
-				250);
-		g.drawString("Current level:         \t" + String.valueOf(skills.getStatic(skill)) + "\t"
-				+ String.valueOf(skills.getExperience(skill)), 2, 270);
-		g.drawString("Next level:             \t" + String.valueOf(skills.getStatic(skill) + 1) + "\t"
-				+ String.valueOf(skills.experienceToLevel(skill)) + "\t"
-				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 290);
-		g.drawString("Experience gained: \t" + String.valueOf(experienceTracker.getGainedLevels(skill)) + "\t"
-				+ String.valueOf(experienceTracker.getGainedXP(skill)) + "\t"
-				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 310);
-		g.drawString("Spells used:           \t" + String.valueOf(startAmount - currentAmount) + "\t"
-				+ String.valueOf(currentAmount) + "\t"
-				+ String.valueOf(currentAmount - skills.experienceToLevel(skill) / experiencePerSpell), 2, 330);
+		g.drawString("Elapsed -> " + String.valueOf(formatTime(experienceTracker.getElapsed(skill))), 2, 50);
+		g.drawString(String.valueOf(skill) + " -> " + String.valueOf(skills.getStatic(skill)) + " "
+				+ String.valueOf(formatTime(experienceTracker.getTimeToLevel(skill))), 2, 65);
+		g.drawString("Gained -> " + String.valueOf(experienceTracker.getGainedLevels(skill)) + " "
+				+ String.valueOf(experienceTracker.getGainedXP(skill)) + " "
+				+ String.valueOf(experienceTracker.getGainedXPPerHour(skill)), 2, 80);
+		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
 	}
 
-	public int nextLoop() {
-		return random(200, 300);
+	private void kill() throws InterruptedException {
+		stop();
+		sleep(1000);
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
 		// properties
-		@SuppressWarnings("unchecked")
-		NPC npc = npcs.closest(n -> n != null && n.getName().contains(npcName) && !n.getName().contains(nonNpcName)
-				&& !n.isHitBarVisible() && n.getHealthPercent() > 0 && !n.isUnderAttack() && n.isAttackable());
+		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
+		NPC npc = npcs.closest(n -> n != null && !n.isHitBarVisible() && n.getHealthPercent() > 0 && !n.isUnderAttack()
+				&& n.isAttackable() && map.canReach(n));
 		boolean ableToCast = magic.canCast(spell);
+		long currentTime = System.nanoTime();
+		long seconds = (currentTime - lastMovement) / 1000000000;
 
-		// no runes in backpack
-		if (!ableToCast) {
-			stop();
+		// action
+		if (myPlayer().isMoving() || myPlayer().isAnimating() || combat.isFighting()) {
+			lastMovement = currentTime;
+		} else if (seconds > maxIdle || mod != null || npc == null || !ableToCast) {
+			kill();
+		} else {
+			magic.castSpellOnEntity(spell, npc);
+			sleep(random(1000, 1200));
 		}
 
-		// player busy
-		if (myPlayer().isAnimating() || myPlayer().isMoving() || myPlayer().isUnderAttack()) {
-			return nextLoop();
-		}
-
-		// npc busy
-		if (npc == null) {
-			camera.toEntity(npc);
-			return nextLoop();
-		}
-
-		// attack
-		magic.castSpellOnEntity(spell, npc);
-		sleep(random(600, 800));
-
-		return nextLoop();
+		// next
+		return random(200, 400);
 	}
 }
-
-//// bones
-//GroundItem bones = getGroundItems().closest("Bones");
-//if (bones != null && (bones.getPosition().distance(myPlayer().getPosition()) > 1) && (bones.getPosition().distance(myPlayer().getPosition()) < 5)) {
-//	bones.interact("Take");
-//	sleep(random(450, 750));
-//	if (getInventory().contains("Bones")) {
-//		getInventory().interact("Bury","Bones");
-//		return tick();
-//	}
-//}
-//
-//// feathers
-//GroundItem feathers = getGroundItems().closest("Feathers");
-//if (feathers != null && (bones.getPosition().distance(myPlayer().getPosition()) > 1) && (feathers.getPosition().distance(myPlayer().getPosition()) < 2)) {
-//	feathers.interact("Take");
-//}

@@ -33,7 +33,7 @@ public class Main extends Script {
 	private int distance = 7;
 	private long minPeople = 3;
 	private long lastMovement = System.nanoTime();
-	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
+	private String teleport = "Edgeville";
 	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
 	private long pestZoneX = 6700;
@@ -192,9 +192,9 @@ public class Main extends Script {
 		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
 		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler;
 		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
-		boolean aboutToDie = lowHp && food == null && !playerInPestControl && !magic.canCast(teleport);
-		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && magic.canCast(teleport);
 		boolean shouldEat = lowHp && food != null;
+		boolean aboutToDie = lowHp && food == null && !playerInPestControl && !necklace.hasAction(teleport);
+		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && necklace.hasAction(teleport);
 		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
 		boolean shouldBury = bone != null;
 		boolean shouldPickUp = ground != null && !inventory.isFull();
@@ -249,7 +249,7 @@ public class Main extends Script {
 			worlds.hopToP2PWorld();
 		} else if (shouldTeleport) {
 			log("teleport");
-			magic.castSpell(teleport);
+			necklace.interact(teleport);
 		} else if (shouldEat) {
 			log("eat");
 			food.interact("Eat", "Drink");

@@ -45,8 +45,10 @@ public class Main extends Script {
 
 	@Override
 	public void onStart() throws InterruptedException {
-		isRanged = equipment.getItemInSlot(EquipmentSlot.WEAPON.slot).getName().toLowerCase().contains("bow")
-				|| equipment.getItemInSlot(EquipmentSlot.CAPE.slot).getName().toLowerCase().contains("ava");
+		Item weapon = equipment.getItemInSlot(EquipmentSlot.WEAPON.slot);
+		Item cape = equipment.getItemInSlot(EquipmentSlot.CAPE.slot);
+		isRanged = (weapon != null && weapon.getName().toLowerCase().contains("bow"))
+				|| (cape != null && cape.getName().toLowerCase().contains("ava"));
 		int mode = configs.get(43);
 		skill = isRanged ? Skill.RANGED : mode == 1 ? Skill.STRENGTH : mode == 3 ? Skill.DEFENCE : Skill.ATTACK;
 		experienceTracker.start(skill);

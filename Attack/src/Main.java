@@ -111,8 +111,10 @@ public class Main extends Script {
 						|| n.getName().toLowerCase().contains("rune sq shield")
 						|| n.getName().toLowerCase().contains("rune kitesheld")
 						|| n.getName().toLowerCase().contains("diamond")
+						|| n.getName().toLowerCase().contains("lotting bag")
 						|| n.getName().toLowerCase().contains("dragonstone")
 						|| n.getName().toLowerCase().contains("runite bar")
+						|| n.getName().toLowerCase().contains("emblem")
 						|| n.getName().toLowerCase().contains("half of key")
 						|| (isRanged && n.getAmount() >= 3
 								&& (n.getName().toLowerCase().contains("arrow")

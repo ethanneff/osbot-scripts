@@ -37,7 +37,7 @@ public class Main extends Script {
 	private NpcType currentNpcType = NpcType.FleshCrawler;
 	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
-	private long pestZoneX = 7000;
+	private long pestZoneX = 6700;
 
 	private enum NpcType {
 		FleshCrawler, Cyclops, ChaosDruids

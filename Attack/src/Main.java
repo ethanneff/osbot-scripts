@@ -34,13 +34,13 @@ public class Main extends Script {
 	private long minPeople = 3;
 	private long lastMovement = System.nanoTime();
 	private MagicSpell teleport = Spells.NormalSpells.VARROCK_TELEPORT;
-	private NpcType currentNpcType = NpcType.FleshCrawler;
 	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
 	private long pestZoneX = 6700;
+	private NpcType currentNpcType = NpcType.ChaosDruids;
 
 	private enum NpcType {
-		FleshCrawler, Cyclops, ChaosDruids
+		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon
 	}
 
 	@Override
@@ -116,14 +116,29 @@ public class Main extends Script {
 						|| n.getName().toLowerCase().contains("runite bar")
 						|| n.getName().toLowerCase().contains("emblem")
 						|| n.getName().toLowerCase().contains("half of key")
-						|| (isRanged && n.getAmount() >= 3
+						|| (isRanged
+								&& n.getAmount() >= 3
 								&& (n.getName().toLowerCase().contains("arrow")
 										|| n.getName().toLowerCase().contains("dart")))
 						|| (currentNpcType == NpcType.FleshCrawler
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
 										|| n.getName().toLowerCase().contains("nature rune")
 										|| n.getName().toLowerCase().contains("fire rune")))
-						|| (currentNpcType == NpcType.Cyclops
+						|| (currentNpcType == NpcType.GreaterDemon
+								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
+										|| n.getName().toLowerCase().contains("base")
+										|| n.getName().toLowerCase().contains("rune")
+										|| n.getName().toLowerCase().contains("mithril")
+										|| n.getName().toLowerCase().contains("adamant")
+										|| n.getName().toLowerCase().contains("demon head")
+										|| n.getName().toLowerCase().contains("slayer")
+										|| n.getName().toLowerCase().contains("top")))
+						|| (currentNpcType == NpcType.Cyclops && (n.getDefinition().isNoted()
+								|| n.hasAction("Eat", "Drink") || n.getName().toLowerCase().contains("rune")
+								|| n.getName().toLowerCase().contains("gloves")
+								|| n.getName().toLowerCase().contains("essence")
+								|| n.getName().toLowerCase().contains("ranarr")))
+						|| (currentNpcType == NpcType.Banchee
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("coin")
 										|| n.hasAction("Eat", "Drink") || n.getName().toLowerCase().contains("rune")
 										|| n.getName().toLowerCase().contains("ranarr")

@@ -16,10 +16,8 @@ import org.osbot.rs07.api.model.Item;
 import org.osbot.rs07.api.model.NPC;
 import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.EquipmentSlot;
-import org.osbot.rs07.api.ui.MagicSpell;
 import org.osbot.rs07.api.ui.PrayerButton;
 import org.osbot.rs07.api.ui.Skill;
-import org.osbot.rs07.api.ui.Spells;
 import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
 import org.osbot.rs07.script.ScriptManifest;
@@ -92,6 +90,7 @@ public class Main extends Script {
 		Position playerPosition = myPlayer().getPosition();
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
+		Item necklace = equipment.getItemInSlot(EquipmentSlot.AMULET.slot);
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		Player nearbyMovingPlayer = players
 				.closest(p -> p != null && p.isMoving() && p.getPosition().distance(myPlayer()) > distance);
@@ -190,11 +189,11 @@ public class Main extends Script {
 		boolean modNearby = mod != null;
 		boolean playerBusy = myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting();
 		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
-		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler;
+		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler && food == null;
 		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
-		boolean shouldEat = lowHp && food != null;
 		boolean aboutToDie = lowHp && food == null && !playerInPestControl && !necklace.hasAction(teleport);
 		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && necklace.hasAction(teleport);
+		boolean shouldEat = (lowHp && food != null) || (inventoryIsFull && food != null);
 		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
 		boolean shouldBury = bone != null;
 		boolean shouldPickUp = ground != null && !inventory.isFull();

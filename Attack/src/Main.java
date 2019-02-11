@@ -120,8 +120,7 @@ public class Main extends Script {
 										|| n.getName().toLowerCase().contains("dart")))
 						|| (currentNpcType == NpcType.FleshCrawler
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
-										|| n.getName().toLowerCase().contains("nature rune")
-										|| n.getName().toLowerCase().contains("fire rune")))
+										|| n.getName().toLowerCase().contains("rune")))
 						|| (currentNpcType == NpcType.GreaterDemon
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
 										|| n.getName().toLowerCase().contains("base")
@@ -181,6 +180,7 @@ public class Main extends Script {
 		// state
 		long currentWorld = worlds.getCurrentWorld();
 		long currentTime = System.nanoTime();
+		boolean necklaceCanTeleport = necklace != null && necklace.hasAction(teleport);
 		boolean playerBeforePestEntry = pestBeforeEntry.contains(myPlayer()) && pestGangplank != null;
 		boolean playerWaitingInPestBoat = pestWaitingInBoat.contains(myPlayer());
 		boolean playerInPestControl = playerPosition.getX() > pestZoneX || playerBeforePestEntry
@@ -191,8 +191,8 @@ public class Main extends Script {
 		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
 		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler && food == null;
 		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
-		boolean aboutToDie = lowHp && food == null && !playerInPestControl && !necklace.hasAction(teleport);
-		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && necklace.hasAction(teleport);
+		boolean aboutToDie = lowHp && food == null && !playerInPestControl;
+		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && necklaceCanTeleport;
 		boolean shouldEat = (lowHp && food != null) || (inventoryIsFull && food != null);
 		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
 		boolean shouldBury = bone != null;
@@ -248,6 +248,7 @@ public class Main extends Script {
 			worlds.hopToP2PWorld();
 		} else if (shouldTeleport) {
 			log("teleport");
+			equipment.openTab();
 			necklace.interact(teleport);
 		} else if (shouldEat) {
 			log("eat");

@@ -120,7 +120,9 @@ public class Main extends Script {
 										|| n.getName().toLowerCase().contains("dart")))
 						|| (currentNpcType == NpcType.FleshCrawler
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
-										|| n.getName().toLowerCase().contains("rune")))
+										|| n.getName().toLowerCase().contains("nature rune")
+										|| n.getName().toLowerCase().contains("body rune")
+										|| n.getName().toLowerCase().contains("fire rune")))
 						|| (currentNpcType == NpcType.GreaterDemon
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
 										|| n.getName().toLowerCase().contains("base")

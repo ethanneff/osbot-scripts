@@ -191,11 +191,11 @@ public class Main extends Script {
 		boolean modNearby = mod != null;
 		boolean playerBusy = myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting();
 		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
-		boolean inventoryIsFull = inventory.isFull() && currentNpcType == NpcType.FleshCrawler && food == null;
+		boolean inventoryIsFull = inventory.isFull();
 		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
-		boolean aboutToDie = lowHp && food == null && !playerInPestControl;
+		boolean cannotHeal = lowHp && food == null && !playerInPestControl;
 		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && necklaceCanTeleport;
-		boolean shouldEat = (lowHp && food != null) || (inventoryIsFull && food != null);
+		boolean shouldEat = food != null && (lowHp || inventoryIsFull);
 		boolean shouldRun = !settings.isRunning() && settings.getRunEnergy() > random(10, 20);
 		boolean shouldBury = bone != null;
 		boolean shouldPickUp = ground != null && !inventory.isFull();
@@ -242,7 +242,7 @@ public class Main extends Script {
 		}
 
 		// attack
-		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || aboutToDie) {
+		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || cannotHeal) {
 			log("early exit");
 			stop();
 		} else if (shouldWorldHop) {

@@ -115,7 +115,7 @@ public class Main extends Script {
 						|| n.getName().toLowerCase().contains("runite bar")
 						|| n.getName().toLowerCase().contains("emblem")
 						|| n.getName().toLowerCase().contains("half of key")
-						|| (isRanged && n.getAmount() >= 2
+						|| (isRanged && n.getAmount() >= 3
 								&& (n.getName().toLowerCase().contains("arrow")
 										|| n.getName().toLowerCase().contains("dart")))
 						|| (currentNpcType == NpcType.FleshCrawler
@@ -272,7 +272,7 @@ public class Main extends Script {
 
 		// high alch
 
-		// loop
+//		 loop
 		return random(800, 1200);
 	}
 }

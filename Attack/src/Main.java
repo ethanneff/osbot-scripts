@@ -220,6 +220,7 @@ public class Main extends Script {
 				.size() >= minPeople && !playerBusy && playerOutOfCombat;
 		boolean shouldPestPrayer = !prayer.isActivated(prayerSkill);
 		boolean shouldHopToPestControl = currentWorld != 344 && (playerBeforePestEntry || playerWaitingInPestBoat);
+		boolean shouldLogout = modNearby || inventoryIsFullWithoutFood || hasNotMovedInALongTime || cannotHeal;
 
 		// update
 		lastMovement = playerBusy ? currentTime : lastMovement;
@@ -256,7 +257,7 @@ public class Main extends Script {
 		}
 
 		// attack
-		if (modNearby || inventoryIsFull || hasNotMovedInALongTime || cannotHeal) {
+		if (shouldLogout) {
 			log("early exit");
 			stop();
 		} else if (shouldWorldHop) {

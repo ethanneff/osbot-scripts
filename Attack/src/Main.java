@@ -206,6 +206,7 @@ public class Main extends Script {
 		boolean playerBusy = myPlayer().isAnimating() || myPlayer().isMoving() || combat.isFighting();
 		boolean playerOutOfCombat = ((currentTime - lastMovement) / 1000000000) > 10;
 		boolean inventoryIsFull = inventory.isFull();
+		boolean inventoryIsFullWithoutFood = inventoryIsFull && food == null;
 		boolean hasNotMovedInALongTime = ((currentTime - lastMovement) / 1000000000) > idleTime;
 		boolean cannotHeal = lowHp && food == null && !playerInPestControl;
 		boolean shouldTeleport = lowHp && food == null && !playerInPestControl && necklaceCanTeleport;

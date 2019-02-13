@@ -38,7 +38,7 @@ public class Main extends Script {
 	private NpcType currentNpcType = NpcType.FleshCrawler;
 
 	private enum NpcType {
-		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon
+		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon, MossGiant
 	}
 
 	@Override
@@ -152,6 +152,22 @@ public class Main extends Script {
 										|| n.getName().toLowerCase().contains("torstol")
 										|| n.getName().toLowerCase().contains("steel chainbody")
 										|| n.getName().toLowerCase().contains("2h")))
+						|| (currentNpcType == NpcType.MossGiant
+								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("rune")
+										|| n.getName().toLowerCase().contains("air rune")
+										|| n.getName().toLowerCase().contains("law rune")
+										|| n.getName().toLowerCase().contains("scroll")
+										|| n.getName().toLowerCase().contains("mossy key")
+										|| n.getName().toLowerCase().contains("cosmic rune")
+										|| n.getName().toLowerCase().contains("chaos rune")
+										|| n.getName().toLowerCase().contains("death rune")
+										|| n.getName().toLowerCase().contains("nature rune")
+										|| n.getName().toLowerCase().contains("blood rune")
+										|| n.getName().toLowerCase().contains("long bone")
+										|| n.getName().toLowerCase().contains("curved bone")
+										|| n.getName().toLowerCase().contains("ranarr")
+										|| n.getName().toLowerCase().contains("snapdragon")
+										|| n.getName().toLowerCase().contains("torstol")))
 						|| (currentNpcType == NpcType.ChaosDruids
 								&& (n.getDefinition().isNoted() || n.getName().toLowerCase().contains("ranarr")
 										|| n.getName().toLowerCase().contains("harralander")

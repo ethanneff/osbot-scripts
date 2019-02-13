@@ -101,7 +101,7 @@ public class Main extends Script {
 				&& !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && n.isInteracting(myPlayer()));
 		NPC nextTarget = attackingNpc != null ? attackingNpc : potentialNpc;
-		GroundItem ground = getGroundItems()
+		GroundItem ground = groundItems
 				.closest(n -> n != null && n.getPosition().distance(myPlayer().getPosition()) <= distance
 						&& map.canReach(n) && n.getName().toLowerCase().contains("shield left half")
 						|| n.getName().toLowerCase().contains("dragon spear")

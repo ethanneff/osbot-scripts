@@ -89,7 +89,7 @@ public class Main extends Script {
 		// environment
 		Position playerPosition = myPlayer().getPosition();
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
-		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury"));
+		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury") && n.getName().contains("Big bone"));
 		Item necklace = equipment.getItemInSlot(EquipmentSlot.AMULET.slot);
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		Player nearbyMovingPlayer = players

@@ -94,11 +94,11 @@ public class Main extends Script {
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		Player nearbyMovingPlayer = players
 				.closest(p -> p != null && p.isMoving() && p.getPosition().distance(myPlayer()) > distance);
-		NPC potentialNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isHitBarVisible()
-				&& n.getHealthPercent() > 0 && !n.isUnderAttack() && !n.getName().toLowerCase().contains("rat")
-				&& map.canReach(n) && n.getPosition().distance(myPlayer().getPosition()) <= distance);
+		NPC potentialNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isUnderAttack()
+				&& n.getHealthPercent() > 0 && !n.getName().toLowerCase().contains("rat") && map.canReach(n)
+				&& n.getPosition().distance(myPlayer().getPosition()) <= distance);
 		NPC attackingNpc = npcs.closest(n -> n != null && n.isAttackable() && !n.isUnderAttack()
-				&& !n.getName().toLowerCase().contains("rat") && map.canReach(n)
+				&& n.getHealthPercent() > 0 && !n.getName().toLowerCase().contains("rat") && map.canReach(n)
 				&& n.getPosition().distance(myPlayer().getPosition()) <= distance && n.isInteracting(myPlayer()));
 		NPC nextTarget = attackingNpc != null ? attackingNpc : potentialNpc;
 		GroundItem ground = groundItems

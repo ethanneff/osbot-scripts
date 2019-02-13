@@ -290,7 +290,7 @@ public class Main extends Script {
 
 		// high alch
 
-//		 loop
+		// loop
 		return random(800, 1200);
 	}
 }

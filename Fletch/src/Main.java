@@ -3,7 +3,6 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 
 import org.osbot.rs07.api.model.Item;
-import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.Skill;
 import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
@@ -66,14 +65,13 @@ public class Main extends Script {
 		// properties
 		Item tool = inventory.getItem(n -> n != null && n.getName().contains(toolType));
 		Item item = inventory.getItem(n -> n != null && n.getName().contains(itemType));
-		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		long currentTime = System.nanoTime();
 		long seconds = (currentTime - lastMovement) / 1000000000;
 
 		// action
 		if (myPlayer().isMoving() || myPlayer().isAnimating() || combat.isFighting()) {
 			lastMovement = currentTime;
-		} else if (seconds > maxIdle || mod != null) {
+		} else if (seconds > maxIdle) {
 			kill();
 		} else if (item == null) {
 			bank.open();
@@ -90,9 +88,9 @@ public class Main extends Script {
 			bank.close();
 		} else if (item != null && tool != null) {
 			selectMenu(tool, item, 16);
-			if (!myPlayer().isAnimating()) {
-				selectMenu(tool, item, 15);
-			}
+//			if (!myPlayer().isAnimating()) {
+//				selectMenu(tool, item, 15);
+//			}
 		}
 
 		// next

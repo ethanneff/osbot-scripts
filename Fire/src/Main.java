@@ -4,7 +4,6 @@ import java.awt.Graphics2D;
 
 import org.osbot.rs07.api.map.Position;
 import org.osbot.rs07.api.model.Item;
-import org.osbot.rs07.api.model.Player;
 import org.osbot.rs07.api.ui.Skill;
 import org.osbot.rs07.api.ui.Tab;
 import org.osbot.rs07.script.Script;
@@ -59,17 +58,18 @@ public class Main extends Script {
 		// properties
 		Item tool = inventory.getItem(n -> n != null && n.getName().contains(toolType));
 		Item item = inventory.getItem(n -> n != null && n.getName().contains(itemType));
-		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		Position start = new Position(3181, 3506, 0);
+		Position ge = new Position(3160, 3493, 0);
 		long currentTime = System.nanoTime();
 		long seconds = (currentTime - lastMovement) / 1000000000;
 
 		// action
 		if (myPlayer().isMoving() || myPlayer().isAnimating() || combat.isFighting()) {
 			lastMovement = currentTime;
-		} else if (seconds > maxIdle || mod != null) {
+		} else if (seconds > maxIdle) {
 			kill();
 		} else if (item == null) {
+			walking.webWalk(ge);
 			bank.open();
 			bank.depositAllExcept(n -> n != null && n.getName().contains(toolType));
 			Item itemBank = bank.getItem(itemType);
@@ -84,9 +84,10 @@ public class Main extends Script {
 			bank.close();
 			walking.webWalk(start);
 		} else if (item != null && tool != null) {
+			lastMovement = currentTime;
 			tool.interact();
 			item.interact();
-			sleep(1000);
+			sleep(1200);
 		}
 
 		// next

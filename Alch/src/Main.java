@@ -20,7 +20,7 @@ public class Main extends Script {
 	private MagicSpell spell = Spells.NormalSpells.HIGH_LEVEL_ALCHEMY;
 	private String itemName = "bow";
 	private String runeName = "nature";
-	private String staffName = "Bryophyta's Staff";
+	private String staffName = "Bryophyta's staff";
 	private int alchCount = 0;
 	private int reloadCount = random(500, 520);
 

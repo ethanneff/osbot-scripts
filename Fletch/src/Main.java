@@ -88,9 +88,10 @@ public class Main extends Script {
 			bank.close();
 		} else if (item != null && tool != null) {
 			selectMenu(tool, item, 16);
-//			if (!myPlayer().isAnimating()) {
-//				selectMenu(tool, item, 15);
-//			}
+			sleep(200);
+			if (!myPlayer().isAnimating()) {
+				selectMenu(tool, item, 15);
+			}
 		}
 
 		// next

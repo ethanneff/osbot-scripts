@@ -95,6 +95,9 @@ public class Main extends Script {
 			alchCount++;
 		} else if (shouldAlch) {
 			item.interact();
+//			sleep(random(1100, 1300));
+//			magic.castSpell(teleport);
+//			sleep(random(1100, 1300));
 			alchCount++;
 			lastMovement = currentTime;
 			sleep(2750); // 2600 = 69k

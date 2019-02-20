@@ -35,10 +35,10 @@ public class Main extends Script {
 	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
 	private long pestZoneX = 6700;
-	private NpcType currentNpcType = NpcType.FleshCrawler;
+	private NpcType currentNpcType = NpcType.ElderChaosDruids;
 
 	private enum NpcType {
-		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon, MossGiant
+		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon, MossGiant, ElderChaosDruids
 	}
 
 	@Override
@@ -91,6 +91,7 @@ public class Main extends Script {
 		Item food = inventory.getItem(n -> n != null && n.hasAction("Drink") || n.hasAction("Eat"));
 		Item bone = inventory.getItem(n -> n != null && n.hasAction("Bury") && n.getName().contains("Big bone"));
 		Item necklace = equipment.getItemInSlot(EquipmentSlot.AMULET.slot);
+		Entity chaosAlter = objects.closest(n -> n != null && n.getId() == 411);
 		Player mod = players.closest(n -> n != null && n.getName().startsWith("Mod "));
 		Player nearbyMovingPlayer = players
 				.closest(p -> p != null && p.isMoving() && p.getPosition().distance(myPlayer()) > distance);
@@ -222,6 +223,7 @@ public class Main extends Script {
 		boolean shouldPestPrayer = !prayer.isActivated(prayerSkill);
 		boolean shouldHopToPestControl = currentWorld != 344 && (playerBeforePestEntry || playerWaitingInPestBoat);
 		boolean shouldLogout = modNearby || inventoryIsFullWithoutFood || hasNotMovedInALongTime || cannotHeal;
+		boolean shouldPray = skills.getDynamic(Skill.PRAYER) <= 20 && currentNpcType == NpcType.ElderChaosDruids;
 
 		// update
 		lastMovement = playerBusy ? currentTime : lastMovement;
@@ -274,6 +276,10 @@ public class Main extends Script {
 		} else if (shouldRun) {
 			log("run");
 			settings.setRunning(true);
+		} else if (shouldPray) {
+			log("pray");
+			walking.webWalk(new Position(3240, 3609, 0));
+			chaosAlter.interact();
 		} else if (shouldBury) {
 			log("bury");
 			bone.interact("Bury");

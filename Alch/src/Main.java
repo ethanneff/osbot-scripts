@@ -21,8 +21,10 @@ public class Main extends Script {
 	private String itemName = "bow";
 	private String runeName = "nature";
 	private String staffName = "Bryophyta's staff";
+	private MagicSpell teleport = Spells.NormalSpells.CAMELOT_TELEPORT;
 	private int alchCount = 0;
 	private int reloadCount = random(500, 520);
+	private boolean teleportEnabled = true;
 
 	// interface
 	private String formatTime(long ms) {

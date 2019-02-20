@@ -100,7 +100,7 @@ public class Main extends Script {
 //			sleep(random(1100, 1300));
 			alchCount++;
 			lastMovement = currentTime;
-			sleep(2750); // 2600 = 69k
+			sleep(2750); // 2600 = 69k, 2750 = 65k
 		} else if (shouldSelectSpell) {
 			if (!magic.canCast(spell)) {
 				kill();

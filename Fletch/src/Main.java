@@ -12,10 +12,10 @@ import org.osbot.rs07.script.ScriptManifest;
 public class Main extends Script {
 	// properties
 	private Skill skill = Skill.FLETCHING;
-	private String itemType = "Yew logs";
 	private String toolType = "Knife";
 	private long lastMovement;
 	private int maxIdle = 60;
+	private long duration = 0;
 
 	@Override
 	public void onStart() throws InterruptedException {
@@ -46,17 +46,62 @@ public class Main extends Script {
 		g.drawRect(mouse.getPosition().x - 3, mouse.getPosition().y - 3, 6, 6);
 	}
 
-	private void kill() throws InterruptedException {
-		stop();
-		sleep(1000);
+	private void interact() throws InterruptedException {
+		sleep(random(1000, 1500));
 	}
 
-	private void selectMenu(Item tool, Item item, int index) throws InterruptedException {
-		tool.interact();
-		item.interact();
-		sleep(1000);
-		widgets.get(270, index).interact("Make");
-		sleep(1000);
+	private String getItemType() {
+		int level = skills.getStatic(skill);
+		if (level < 20) {
+			return "Logs";
+		} else if (level < 35) {
+			return "Oak logs";
+		} else if (level < 50) {
+			return "Willow logs";
+		} else if (level < 65) {
+			return "Maple logs";
+		} else if (level < 80) {
+			return "Yew logs";
+		}
+		return "Magic logs";
+	}
+
+	private int getWidgetIndex() {
+		int level = skills.getStatic(skill);
+		if (level < 10) {
+			return 16;
+		} else if (level < 20) {
+			return 17;
+		} else if (level < 25) {
+			return 15;
+		} else if (level < 35) {
+			return 16;
+		} else if (level < 40) {
+			return 15;
+		} else if (level < 50) {
+			return 16;
+		} else if (level < 55) {
+			return 15;
+		} else if (level < 65) {
+			return 16;
+		} else if (level < 70) {
+			return 15;
+		} else if (level < 80) {
+			return 16;
+		} else if (level < 85) {
+			return 15;
+		} else if (level < 100) {
+			return 16;
+		}
+		return 16;
+	}
+
+	@SuppressWarnings("unchecked")
+	private Item getItem(String itemType) {
+		Item item = inventory.getItem(n -> n != null && n.getName().contains(itemType));
+		if (item != null)
+			return item;
+		return inventory.getItem(n -> n != null && n.getName().toLowerCase().contains("logs"));
 	}
 
 	@Override
@@ -64,22 +109,27 @@ public class Main extends Script {
 	public int onLoop() throws InterruptedException {
 		// properties
 		Item tool = inventory.getItem(n -> n != null && n.getName().contains(toolType));
-		Item item = inventory.getItem(n -> n != null && n.getName().contains(itemType));
+		String itemType = getItemType();
+		Item item = getItem(itemType);
 		long currentTime = System.nanoTime();
+		int widgetIndex = getWidgetIndex();
 		long seconds = (currentTime - lastMovement) / 1000000000;
+		duration = (currentTime - duration) / 1000000000;
 
 		// action
 		if (myPlayer().isMoving() || myPlayer().isAnimating() || combat.isFighting()) {
 			lastMovement = currentTime;
 		} else if (seconds > maxIdle) {
-			kill();
+			stop();
+			interact();
 		} else if (item == null) {
 			bank.open();
 			bank.depositAllExcept(n -> n != null && n.getName().contains(toolType));
 			Item itemBank = bank.getItem(itemType);
 			Item toolBank = bank.getItem(toolType);
 			if (itemBank == null || (!inventory.contains(toolType) && toolBank == null)) {
-				kill();
+				stop();
+				interact();
 			}
 			if (!inventory.contains(toolType)) {
 				bank.withdraw(toolType, 1);
@@ -87,14 +137,15 @@ public class Main extends Script {
 			bank.withdrawAll(itemType);
 			bank.close();
 		} else if (item != null && tool != null) {
-			selectMenu(tool, item, 16);
-			sleep(200);
-			if (!myPlayer().isAnimating()) {
-				selectMenu(tool, item, 15);
-			}
+			tool.interact();
+			item.interact();
+			interact();
+			widgets.get(270, widgetIndex).interact("Make");
+			interact();
+			mouse.moveOutsideScreen();
 		}
 
 		// next
-		return random(200, 400);
+		return random(200, 500);
 	}
 }

@@ -13,9 +13,14 @@ import org.osbot.rs07.script.ScriptManifest;
 
 @ScriptManifest(author = "Me", name = "Smelt", version = -15.0, logo = "", info = "Does some noob shit")
 public class Main extends Script {
-
-	private long lastMovement;
+	// properties
 	private Skill skill = Skill.CRAFTING;
+	private String itemType = "Gold bar";
+	private String toolType = "Bracelet mould";
+	private int widgetLocation = 446;
+	private int widgetIndex = 46;
+	private long lastMovement;
+	private int maxIdle = 60;
 
 	@Override
 	public void onStart() throws InterruptedException {
@@ -23,15 +28,10 @@ public class Main extends Script {
 		lastMovement = System.nanoTime();
 		experienceTracker.start(skill);
 		tabs.open(Tab.INVENTORY);
-		sleep(1000);
-	}
-
-	private int tick() {
-		return random(100, 300);
 	}
 
 	private void interact() throws InterruptedException {
-		sleep(random(1000, 1500));
+		sleep(random(500, 1500));
 	}
 
 	private final String formatTime(final long ms) {
@@ -58,78 +58,58 @@ public class Main extends Script {
 	@Override
 	@SuppressWarnings("unchecked")
 	public int onLoop() throws InterruptedException {
-		Item goldBar = inventory.getItem(n -> n != null && n.getName().toLowerCase().contains("gold bar"));
+		// properties
+		Item item = inventory.getItem(n -> n != null && n.getName().contains(itemType));
+		Item tool = inventory.getItem(n -> n != null && n.getName().contains(toolType));
 		Entity furnace = objects.closest("Furnace");
 		Position furnacePosition = new Position(3274, 3186, 0);
-
-		// enable running
-		if (!settings.isRunning() && settings.getRunEnergy() > random(10, 20)) {
-			settings.setRunning(true);
-		}
-
-		// action
 		long currentTime = System.nanoTime();
-		if (myPlayer().isMoving() || myPlayer().isAnimating()) {
-			lastMovement = currentTime;
-			return tick();
-		}
-
 		long seconds = (currentTime - lastMovement) / 1000000000;
 
-		// exit if nothing happens
-		if (seconds > 20) {
+		// action
+		if (myPlayer().isMoving() || myPlayer().isAnimating() || combat.isFighting()) {
+			lastMovement = currentTime;
+		} else if (seconds > maxIdle) {
 			stop();
-		}
-
-		// prevent spam click
-		if (seconds < 1.5) {
-			return tick();
-		}
-
-		// near furnace
-		if (furnace.getPosition().distance(myPlayer()) < 8) {
-			// go to bank
-			if (goldBar == null) {
+			interact();
+		} else if (!settings.isRunning() && settings.getRunEnergy() > random(20, 50)) {
+			settings.setRunning(true);
+			interact();
+		} else if (furnace.getPosition().distance(myPlayer()) < 8) {
+			if (seconds < 1.5) {
+				interact();
+			} else if (item == null || tool == null) {
 				walking.webWalk(Banks.AL_KHARID);
-				return tick();
-			}
-
-			// need to smelt
-			if (goldBar != null) {
-				// interact
+			} else if (item != null) {
 				furnace.interact("Smelt");
 				interact();
-				widgets.get(446, 47).interact("Make-All");
+				widgets.get(widgetLocation, widgetIndex).interact();
 				interact();
-				return tick();
-
+				mouse.moveOutsideScreen();
 			}
 		} else if (Banks.AL_KHARID.contains(myPlayer())) {
-			// go to furnace
-			if (inventory.contains("Gold bar")) {
-				walking.webWalk(furnacePosition);
-				return tick();
+			bank.open();
+			interact();
+			bank.depositAllExcept(n -> n != null && n.getName().contains(toolType));
+			Item itemBank = bank.getItem(itemType);
+			Item toolBank = bank.getItem(toolType);
+			if (itemBank == null || (!inventory.contains(toolType) && toolBank == null)) {
+				stop();
+				interact();
 			}
-
-			if (!bank.isOpen()) {
-				bank.open();
-				return tick();
+			if (!inventory.contains(toolType)) {
+				bank.withdraw(toolType, 1);
 			}
-
-			if (bank.isOpen()) {
-				if (bank.getItem("Gold bar").getAmount() <= 0) {
-					stop();
-				}
-				bank.depositAllExcept(n -> n != null && n.getName().toLowerCase().contains("mould"));
-				bank.withdraw("Gold bar", random(55, 5555));
-				return tick();
-			}
+			interact();
+			bank.withdrawAll(itemType);
+			interact();
+			walking.webWalk(furnacePosition);
 		} else {
-			// go somewhere if in middle
 			walking.webWalk(Banks.AL_KHARID);
 		}
 
-		return tick();
+		// next
+		return random(200, 500);
 	}
 
 }

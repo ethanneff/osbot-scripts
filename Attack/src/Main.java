@@ -35,10 +35,10 @@ public class Main extends Script {
 	private PrayerButton prayerSkill = PrayerButton.EAGLE_EYE;
 	private long hudBase = 35;
 	private long pestZoneX = 6700;
-	private NpcType currentNpcType = NpcType.ElderChaosDruids;
+	private NpcType currentNpcType = NpcType.Cow;
 
 	private enum NpcType {
-		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon, MossGiant, ElderChaosDruids
+		FleshCrawler, Cyclops, ChaosDruids, Banchee, GreaterDemon, MossGiant, ElderChaosDruids, Chicken, Cow
 	}
 
 	@Override
